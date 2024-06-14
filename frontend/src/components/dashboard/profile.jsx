@@ -56,7 +56,7 @@ const Widget = () => {
   };
 
   return (
-    <div className=" bg-orange-50 h-5xl w-screen mx-auto p-4">
+    <div className=" h-5xl w-screen mx-auto p-4">
       <div className="bg-zinc-100 dark:bg-zinc-800 rounded-lg shadow-lg overflow-hidden">
         {/* Main content */}
         <div className="grid md:grid-cols-3 gap-4">
