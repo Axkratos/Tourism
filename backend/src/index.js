@@ -5,6 +5,8 @@ import database from './db/database.js'
 dotenv.config()
 
 import userRoutes from './routes/userRoutes.js'
+import tripRoutes from './routes/tripRoutes.js'
+import kycRoutes from './routes/kycRoutes.js'
 
 
 const app = express()
@@ -24,6 +26,8 @@ database();
 
 
 app.use("/api/user",userRoutes);
+app.use("/api/trip",tripRoutes);
+app.use("/api/kyc",kycRoutes);
 
 const PORT = 3000;
 
