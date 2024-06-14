@@ -8,9 +8,9 @@ export default {
   ],
   theme: {
     extend: {
-      // backgroundImage:{
-      //   "custom-Image":"url('')"
-      // }
+      backgroundImage:{
+        "custom-Image":"url('C:\Users\dell\Desktop\kusom\KUSOM\frontend\public')"
+      }
     },
   },
   plugins: [],
