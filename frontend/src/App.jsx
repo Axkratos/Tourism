@@ -1,17 +1,4 @@
-<<<<<<< HEAD
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import React from 'react'
-import { Navbar } from './components/common/Navbar'
-import Footer from './components/common/Footer'
-import Home from './components/Home/Home'
-import Dash from './components/dashboard/dash'
 
-// import Navbar from './components/common/Navbar.jsx'
-// import Footer from './components/common/Footer.jsx'
-
-function App() {
-
-=======
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './components/Home/Home'
@@ -27,7 +14,7 @@ import Dashboard from './admin/Dashboard'
 import GuideVerification from './admin/GuideVerification'
 import UserSection from './admin/UserSection'
 import GuideSection from './admin/GuideSection'
->>>>>>> main
+
 
 import KYCForm from './components/form/kyc'
 import Dash from './components/dashboard/dash'
