@@ -6,13 +6,13 @@ const signupUser = async (req, res) => {
     console.log(req.body);
 
     try {
-        const { name, email, password, confirmPassword } = req.body;
+        const { fullName, email, password, confirmPassword } = req.body;
 
         if (password !== confirmPassword) {
             return res.status(400).json({ message: "Passwords do not match" });
         }
 
-        if (!name || !email || !password || !confirmPassword) {
+        if (!fullName || !email || !password || !confirmPassword) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
@@ -25,7 +25,7 @@ const signupUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const newUser = new User({
-            name,
+            fullName,
             email,
             password: hashedPassword
         });
@@ -62,7 +62,7 @@ const loginUser = async (req, res) => {
         res.status(200).json({
             message: "Login successful",
             _id: user._id,
-            name: user.name,
+            fullName: user.fullName,
             email: user.email
         });
     } catch (error) {
