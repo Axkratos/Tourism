@@ -22,13 +22,13 @@ function RegisterGuide() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Validate form data (optional)
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-
+  
     try {
       const response = await fetch('http://localhost:3000/api/user/signup', {
         method: 'POST',
@@ -36,13 +36,13 @@ function RegisterGuide() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData),
-         credentials: 'include',
+        credentials: 'include', // Include credentials in the request
       });
-
+  
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-
+  
       const data = await response.json();
       setSuccess('Registration successful');
       console.log(data);
@@ -51,6 +51,7 @@ function RegisterGuide() {
       console.error('Error:', error);
     }
   };
+  
 
   return (
     <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
