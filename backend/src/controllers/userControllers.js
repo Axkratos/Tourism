@@ -6,22 +6,14 @@ const signupUser = async (req, res) => {
     console.log(req.body);
 
     try {
-        const { name, email, password, confirmPassword, accountType, places, specialty, price, phone, document } = req.body;
+        const { name, email, password, confirmPassword } = req.body;
 
         if (password !== confirmPassword) {
             return res.status(400).json({ message: "Passwords do not match" });
         }
 
-        if (accountType === 'tourist') {
-            if (!name || !email || !password || !confirmPassword) {
-                return res.status(400).json({ message: "All fields are required" });
-            }
-        } else if (accountType === 'guide') {
-            if (!name || !email || !password || !confirmPassword || !places || !specialty || !price || !phone || !document) {
-                return res.status(400).json({ message: "All fields are required" });
-            }
-        } else {
-            return res.status(400).json({ message: "Invalid account type" });
+        if (!name || !email || !password || !confirmPassword) {
+            return res.status(400).json({ message: "All fields are required" });
         }
 
         const existingUser = await User.findOne({ email });
@@ -35,13 +27,7 @@ const signupUser = async (req, res) => {
         const newUser = new User({
             name,
             email,
-            password: hashedPassword,
-            accountType,
-            places: accountType === 'guide' ? places : [],
-            specialty: accountType === 'guide' ? specialty : '',
-            price: accountType === 'guide' ? price : 0,
-            phone: accountType === 'guide' ? phone : null,
-            document: accountType === 'guide' ? document : ''
+            password: hashedPassword
         });
 
         generateTokenSetCookie(newUser._id, res);
@@ -51,13 +37,7 @@ const signupUser = async (req, res) => {
             message: "User created successfully",
             _id: newUser._id,
             name: newUser.name,
-            email: newUser.email,
-            accountType: newUser.accountType,
-            places: newUser.places,
-            specialty: newUser.specialty,
-            price: newUser.price,
-            phone: newUser.phone,
-            document: newUser.document
+            email: newUser.email
         });
     } catch (error) {
         console.error(error.message);
@@ -83,14 +63,7 @@ const loginUser = async (req, res) => {
             message: "Login successful",
             _id: user._id,
             name: user.name,
-            email: user.email,
-            accountType: user.accountType,
-            places: user.places,
-            specialty: user.specialty,
-            price: user.price,
-            phone: user.phone,
-            document: user.document,
-            token: user.token
+            email: user.email
         });
     } catch (error) {
         res.status(500).json({ message: "Internal server error", error: error.message });
