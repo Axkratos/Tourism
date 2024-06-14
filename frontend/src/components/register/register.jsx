@@ -20,21 +20,31 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the formData to your backend using fetch or axios
-    console.log(formData);
-    // Example fetch request
-    // fetch('/api/register', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(formData)
-    // })
-    // .then(response => response.json())
-    // .then(data => console.log(data))
-    // .catch(error => console.error('Error:', error));
+
+    try {
+      const response = await fetch('http://localhost:3000/api/tourist/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Registration successful
+        navigate('/login');
+      } else {
+        // Registration failed, set error message
+        setError(data.message);
+      }
+    } catch (error) {
+      console.error('Error registering:', error);
+      setError('Error registering. Please try again later.');
+    }
   };
 
   return (
