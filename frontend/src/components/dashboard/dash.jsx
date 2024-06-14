@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Demo(){
+function Dash(){
     return(
         <>
         <h1>This is demo</h1>
@@ -8,4 +8,4 @@ function Demo(){
     )
 }
 
-export default Demo;
+export default Dash;
