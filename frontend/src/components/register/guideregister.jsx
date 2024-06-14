@@ -9,6 +9,9 @@ function RegisterGuide() {
     role: 'guide'
   });
 
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -17,21 +20,36 @@ function RegisterGuide() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the formData to your backend using fetch or axios
-    console.log(formData);
-    // Example fetch request
-    // fetch('/api/register', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(formData)
-    // })
-    // .then(response => response.json())
-    // .then(data => console.log(data))
-    // .catch(error => console.error('Error:', error));
+
+    // Validate form data (optional)
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3000/api/user/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData),
+         credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      setSuccess('Registration successful');
+      console.log(data);
+    } catch (error) {
+      setError('Error: ' + error.message);
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -126,6 +144,8 @@ function RegisterGuide() {
           </button>
         </form>
         {/* End Registration Form */}
+        {error && <p className="mt-4 text-red-600">{error}</p>}
+        {success && <p className="mt-4 text-green-600">{success}</p>}
         <div className="mt-4 font-semibold text-sm text-slate-500 text-center md:text-left">
           Already have an account?{' '}
           <a
