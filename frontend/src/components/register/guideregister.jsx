@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-//This is for tourist
 
-function Register() {
+function RegisterGuide() {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'tourist'
+    role: 'guide'
   });
 
   const handleChange = (e) => {
@@ -117,7 +116,7 @@ function Register() {
           <input
             type="hidden"
             name="role"
-            value="tourist"
+            value="guide"
           />
           <button
             className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 text-white uppercase rounded text-xs tracking-wider"
@@ -141,4 +140,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default RegisterGuide;
