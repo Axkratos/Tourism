@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react'
 import { Navbar } from '../common/Navbar'
 
@@ -28,3 +29,16 @@ const Home = () => {
 }
 
 export default Home
+=======
+import React from 'react';
+
+function Demo(){
+    return(
+        <>
+        <h1>This is demo</h1>
+        </>
+    )
+}
+
+export default Demo;
+>>>>>>> main
