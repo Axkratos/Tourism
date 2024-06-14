@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Home from './components/Home/Home'
+import SlidingLogin from './components/login/login'
+import Signup from './components/register/register'
+import Footer from './components/common/Footer'
+import ReviewCard from './components/review/review'
+import Widget from './components/form/form'
+import Demo from './components/dashboard/demo'
+import Profiles from './components/dashboard/profile'
+import Navbar from './components/common/Navbar'
+import Dashboard from './admin/Dashboard'
+import GuideVerification from './admin/GuideVerification'
+import UserSection from './admin/UserSection'
+import GuideSection from './admin/GuideSection'
 
+import KYCForm from './components/form/kyc'
+import Dash from './components/dashboard/dash'
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <BrowserRouter>
+    <Navbar/>
+    <Routes>
+    <Route path="/users" element={<UserSection />} />
+    <Route path="/guides" element={<GuideSection />} />
+
+        <Route path='/' element={<Home/>}></Route>
+        <Route path='/demo' element={<Demo/>}></Route>
+        <Route path='/login' element={<SlidingLogin/>}></Route>
+        <Route path='/signup' element={<Signup/>}></Route>
+        <Route path='/footer' element={<Footer/>}></Route>
+        <Route path='/form' element={<Widget/>}></Route>
+        <Route path='/dash' element={<Dash/>}></Route>
+        <Route path='/review' element={<ReviewCard/>}></Route>
+        <Route path='/kyc' element={<KYCForm/>}></Route>
+        <Route path='/profile' element={<Profiles/>}></Route>
+        <Route path='/dashboard' element={<Dashboard/>}></Route>
+        <Route path="/verify/:id" element={<GuideVerification />} />
+    </Routes>
+    <Footer/>
+    </BrowserRouter>
   )
 }
-
-export default App
