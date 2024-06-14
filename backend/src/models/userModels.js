@@ -13,8 +13,13 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: [true, "Please enter your password"]
-    }
-   
+    },
+     
+     roles:{
+        type: String,
+        enum: ['user', 'guide'],
+        default: 'guide'
+     }
 }, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);
