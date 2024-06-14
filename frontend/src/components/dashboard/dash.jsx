@@ -55,7 +55,7 @@ const Widget = () => {
   };
 
   return (
-    <div className=" bg-lime-50 (max-w-5xl mx-auto p-4">
+    <div className="  (max-w-5xl mx-auto p-4">
       <div className=" bg-gray-50  dark:bg-zinc-800 rounded-lg shadow-lg overflow-hidden">
         {/* Main content */}
         <div className=" grid md:grid-cols-3 gap-4">
@@ -140,7 +140,7 @@ const Widget = () => {
               <div className="p-4">
                 <button
                   type="submit"
-                  className="py-2 px-4 bg-lime-500 text-white rounded-lg hover:bg-blue-600 mt-2"
+                  className="py-2 px-4 bg-red-400 hover:bg-red-700 text-white rounded-lg  mt-4"
                 >
                   Update Profile
                 </button>
