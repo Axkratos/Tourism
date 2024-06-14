@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//This is for tourist
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -9,6 +9,8 @@ function Register() {
     confirmPassword: '',
     role: 'tourist'
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -129,12 +131,12 @@ function Register() {
         {/* End Registration Form */}
         <div className="mt-4 font-semibold text-sm text-slate-500 text-center md:text-left">
           Already have an account?{' '}
-          <a
+          <button
             className="text-red-600 hover:underline hover:underline-offset-4"
-            href="#"
+            onClick={() => navigate('/login')}
           >
             Login
-          </a>
+          </button>
         </div>
       </div>
     </section>

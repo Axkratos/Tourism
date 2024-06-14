@@ -10,7 +10,7 @@ function App() {
     // For simplicity, let's assume the login is successful
 
     // Navigate to the home page
-    navigate('/');
+    navigate('/dash');
   };
 
   return (
