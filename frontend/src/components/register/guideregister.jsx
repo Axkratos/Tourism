@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function RegisterGuide() {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ function RegisterGuide() {
     role: 'guide'
   });
 
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -149,12 +151,12 @@ function RegisterGuide() {
         {success && <p className="mt-4 text-green-600">{success}</p>}
         <div className="mt-4 font-semibold text-sm text-slate-500 text-center md:text-left">
           Already have an account?{' '}
-          <a
+          <button
             className="text-red-600 hover:underline hover:underline-offset-4"
-            href="#"
+            onClick={() => navigate('/login')}
           >
             Login
-          </a>
+          </button>
         </div>
       </div>
     </section>
