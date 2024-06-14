@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   FaFacebook,
@@ -80,3 +81,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
