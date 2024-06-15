@@ -22,5 +22,5 @@ const touristSchema = mongoose.Schema({
      }
 }, { timestamps: true });
 
-const Tourist = mongoose.model("Tourist", userSchema);
+const Tourist = mongoose.model("Tourist", touristSchema);
 export default Tourist;
