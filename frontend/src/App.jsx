@@ -15,7 +15,7 @@ import GuideVerification from './admin/GuideVerification'
 import UserSection from './admin/UserSection'
 import GuideSection from './admin/GuideSection'
 import Form from './components/form/form'
-
+import Sidebar from './components/dashboard/sidebar'
 
 
 import KYCForm from './components/form/kyc'
@@ -46,6 +46,7 @@ export default function App() {
         <Route path='/profile' element={<Profiles/>}></Route>
         <Route path='/dashboard' element={<Dashboard/>}></Route>
         <Route path="/verify/:id" element={<GuideVerification />} />
+        <Route path="/sidebar" element={<Sidebar/>}/>
     </Routes>
     <Footer/>
     </BrowserRouter>

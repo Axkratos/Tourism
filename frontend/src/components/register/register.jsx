@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Register() {
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
