@@ -2,7 +2,7 @@
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './components/Home/Home'
-import SlidingLogin from './components/login/login'
+import Signin from './components/login/login'
 import GuideLogin from './components/login/guidelogin'
 import Signup from './components/register/register'
 import GuideSignup from './components/register/guideregister'
@@ -31,7 +31,7 @@ export default function App() {
         <Route path='/' element={<Home/>}></Route>
 
 
-        <Route path='/signin' element={<SlidingLogin/>}></Route>
+        <Route path='/signin' element={<Signin/>}></Route>
         <Route path='/form' element={<Form/>}></Route>
         <Route path='/login' element={<GuideLogin/>}></Route>
         <Route path='/signup' element={<Signup/>}></Route>
