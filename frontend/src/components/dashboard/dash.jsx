@@ -1,37 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
 
 const Widget = () => {
-  // Dummy data (initial profile)
-  const initialProfile = {
-    name: 'Anupama',
-    location: 'Kathmandu, Nepal',
-  
-    profileImage: 'https://placehold.co/100x100',
-    backgroundImage: 'https://placehold.co/600x300',
-    quote: '"A girl who loves to travel and make new friends."',
-    replyRate: '72%',
-    repliesWithin: '9 hours',
-    reviewsCount: 53,
-    exploreTitle: 'Explore Kathmandu, Nepal, with Anupama',
-    exploreContent:
-      'My city is full of historical palaces and temples. Not only this but there are many places to go for short hike at the outskirts of the city, can help you exploring to Pokhara, chitwan and other places.',
-    aboutMeTitle: 'About me',
-    aboutMeContent:
-      'Namastey! I am a travel loving person who travels a lot too. Been to many countries in Europe over the years learning new cultures and adjusting with their',
-    languages: 'English, Hindi',
-    activities: 'Translation & Interpretation, Pick up & Driving Tours',
-  };
-
   // State for editable profile fields
-  const [profile, setProfile] = useState(initialProfile);
-
-  // State for reviews
+  const [profile, setProfile] = useState({});
   const [reviews, setReviews] = useState([]);
+  const [editMode, setEditMode] = useState(false);
 
   // Simulate fetching reviews from an API
   useEffect(() => {
-    // Replace with actual API call to fetch reviews
     const fetchReviews = async () => {
       // Simulating a delay to mimic API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -47,18 +23,27 @@ const Widget = () => {
     fetchReviews();
   }, []);
 
-  // Update profile handler (not implemented for demo)
+  // Update profile handler
   const updateProfile = (e) => {
     e.preventDefault();
-    // Example: You would normally update profile data here
+    // Here you would normally update profile data from form inputs
+    // For simplicity, let's assume all inputs have 'name' attributes corresponding to profile fields
+    const updatedProfile = {};
+    Array.from(e.target.elements).forEach((element) => {
+      if (element.name) {
+        updatedProfile[element.name] = element.value;
+      }
+    });
+    setProfile(updatedProfile);
+    setEditMode(false); // Exit edit mode after saving
     alert('Profile updated successfully!');
   };
 
   return (
-    <div className="  (max-w-5xl mx-auto p-4">
-      <div className=" bg-gray-50  dark:bg-zinc-800 rounded-lg shadow-lg overflow-hidden">
+    <div className="max-w-5xl mx-auto p-4">
+      <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg shadow-lg overflow-hidden">
         {/* Main content */}
-        <div className=" grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
           {/* Left column */}
           <div className="md:col-span-2">
             {/* Profile header */}
@@ -80,8 +65,9 @@ const Widget = () => {
                 <blockquote className="italic text-zinc-600 dark:text-zinc-300">
                   <textarea
                     name="quote"
-                    value={profile.quote}
-                    readOnly
+                    value={profile.quote || ''}
+                    onChange={(e) => setProfile({ ...profile, quote: e.target.value })}
+                    readOnly={!editMode}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </blockquote>
@@ -100,8 +86,9 @@ const Widget = () => {
                   <h4 className="font-semibold">I will show you</h4>
                   <textarea
                     name="exploreContent"
-                    value={profile.exploreContent}
-                    readOnly
+                    value={profile.exploreContent || ''}
+                    onChange={(e) => setProfile({ ...profile, exploreContent: e.target.value })}
+                    readOnly={!editMode}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -109,8 +96,9 @@ const Widget = () => {
                   <h4 className="font-semibold">{profile.aboutMeTitle}</h4>
                   <textarea
                     name="aboutMeContent"
-                    value={profile.aboutMeContent}
-                    readOnly
+                    value={profile.aboutMeContent || ''}
+                    onChange={(e) => setProfile({ ...profile, aboutMeContent: e.target.value })}
+                    readOnly={!editMode}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -119,8 +107,9 @@ const Widget = () => {
                   <input
                     type="text"
                     name="languages"
-                    value={profile.languages}
-                    readOnly
+                    value={profile.languages || ''}
+                    onChange={(e) => setProfile({ ...profile, languages: e.target.value })}
+                    readOnly={!editMode}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -129,27 +118,35 @@ const Widget = () => {
                   <input
                     type="text"
                     name="activities"
-                    value={profile.activities}
-                    readOnly
+                    value={profile.activities || ''}
+                    onChange={(e) => setProfile({ ...profile, activities: e.target.value })}
+                    readOnly={!editMode}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
               </div>
 
-              {/* Submit button */}
+              {/* Edit/Save button */}
               <div className="p-4">
-                <button
-                  type="submit"
-                  className="py-2 px-4 bg-red-400 hover:bg-red-700 text-white rounded-lg  mt-4"
-                >
-                  Update Profile
-                </button>
+                {editMode ? (
+                  <button type="submit" className="py-2 px-4 bg-green-400 hover:bg-green-700 text-white rounded-lg mr-4">
+                    Save
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setEditMode(true)}
+                    className="py-2 px-4 bg-blue-400 hover:bg-blue-700 text-white rounded-lg mr-4"
+                  >
+                    Edit
+                  </button>
+                )}
               </div>
             </form>
           </div>
 
           {/* Right column */}
-          <div className=" bg-deepPurple-50 md:col-span-1 bg-white dark:bg-zinc-700 p-4 border border-zinc-200 dark:border-zinc-600">
+          <div className="bg-deepPurple-50 md:col-span-1 bg-white dark:bg-zinc-700 p-4 border border-zinc-200 dark:border-zinc-600">
             <div className="flex items-center mb-4">
               <div className="text-lg text-gray-700 dark:text-gray-300">Reviews</div>
             </div>
@@ -177,3 +174,4 @@ const Widget = () => {
 };
 
 export default Widget;
+

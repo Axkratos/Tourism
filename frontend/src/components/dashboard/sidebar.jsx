@@ -26,7 +26,7 @@ const Sidebar = () => {
           <FaHome />
           <span>Home</span>
         </Link>
-        <Link to="/profile" className="menu-item">
+        <Link to="/dash" className="menu-item">
           <FaUser />
           <span>Profile</span>
         </Link>

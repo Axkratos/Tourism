@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Register() {
-  const [error, setError] = useState(null);
+function RegisterGuide() {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'tourist'
+    role: 'guide'
   });
 
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,30 +24,36 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    // Validate form data (optional)
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+  
     try {
       const response = await fetch('http://localhost:3000/api/tourist/signup', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData),
+        credentials: 'include', // Include credentials in the request
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Registration successful
-        navigate('/login');
-      } else {
-        // Registration failed, set error message
-        setError(data.message);
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
+  
+      const data = await response.json();
+      setSuccess('Registration successful');
+      console.log(data);
     } catch (error) {
-      console.error('Error registering:', error);
-      setError('Error registering. Please try again later.');
+      setError('Error: ' + error.message);
+      console.error('Error:', error);
     }
   };
+  
 
   return (
     <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
@@ -58,7 +65,7 @@ function Register() {
       </div>
       <div className="md:w-1/3 max-w-sm">
         <div className="text-center md:text-left">
-          <label className="mr-1">Sign in with</label>
+          <label className="mr-1">Sign in tourist with</label>
           <button
             type="button"
             className="mx-1 h-9 w-9 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-[0_4px_9px_-4px_#3b71ca]"
@@ -130,7 +137,7 @@ function Register() {
           <input
             type="hidden"
             name="role"
-            value="tourist"
+            value="guide"
           />
           <button
             className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 text-white uppercase rounded text-xs tracking-wider"
@@ -140,11 +147,13 @@ function Register() {
           </button>
         </form>
         {/* End Registration Form */}
+        {error && <p className="mt-4 text-red-600">{error}</p>}
+        {success && <p className="mt-4 text-green-600">{success}</p>}
         <div className="mt-4 font-semibold text-sm text-slate-500 text-center md:text-left">
           Already have an account?{' '}
           <button
             className="text-red-600 hover:underline hover:underline-offset-4"
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/signin')}
           >
             Login
           </button>
@@ -154,4 +163,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default RegisterGuide;
