@@ -1,4 +1,4 @@
-import Tourist from "../models/userModels.js"; // Importing the Tourist model
+import Tourist from "../models/touristModel.js"; // Importing the Tourist model
 import bcrypt from "bcrypt";
 import generateTokenSetCookie from "../utils/generateToken.js";
 
