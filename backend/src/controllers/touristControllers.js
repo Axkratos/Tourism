@@ -28,6 +28,7 @@ const signupTourist = async (req, res) => {
       fullName,
       email,
       password: hashedPassword,
+      role: "tourist" // Assuming default role is "tourist"
     });
 
     await newTourist.save();
@@ -39,6 +40,7 @@ const signupTourist = async (req, res) => {
       _id: newTourist._id,
       fullName: newTourist.fullName,
       email: newTourist.email,
+      role: newTourist.role
     });
   } catch (error) {
     console.error(error.message);
@@ -49,33 +51,37 @@ const signupTourist = async (req, res) => {
 };
 
 const loginTourist = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const tourist = await Tourist.findOne({ email });
-    if (!tourist) {
-      return res.status(400).json({ message: "Invalid email or password" });
+    try {
+      const { email, password } = req.body;
+      const tourist = await Tourist.findOne({ email });
+  
+      if (!tourist) {
+        return res.status(400).json({ message: 'Invalid email or password' });
+      }
+  
+      const isPasswordCorrect = await bcrypt.compare(password, tourist.password);
+  
+      if (!isPasswordCorrect) {
+        return res.status(400).json({ message: 'Invalid email or password' });
+      }
+  
+      const token = generateTokenSetCookie(tourist._id, res);
+      console.log('Generated Token:', token); // Log the token
+  
+      res.status(200).json({
+        message: 'Login successful',
+        token,
+        _id: tourist._id,
+        fullName: tourist.fullName,
+        email: tourist.email,
+        role: tourist.role // Ensure role is included
+      });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).json({ message: 'Internal server error', error: error.message });
     }
-
-    const isPasswordCorrect = await bcrypt.compare(password, tourist.password);
-    if (!isPasswordCorrect) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
-
-    generateTokenSetCookie(tourist._id, res);
-    res.status(200).json({
-      message: "Login successful",
-      _id: tourist._id,
-      fullName: tourist.fullName,
-      email: tourist.email,
-    });
-  } catch (error) {
-    console.error(error.message);
-    res
-      .status(500)
-      .json({ message: "Internal server error", error: error.message });
-  }
-};
-
+  };
+  
 const logoutTourist = async (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });

@@ -24,11 +24,11 @@ import Dash from './components/dashboard/dash'
 import Blog from './components/blog/component/Blog'
 import Singleblog from './components/blog/component/Singleblog'
 
-import { AuthContextProvider } from './context/authContext'
+
 
 export default function App() {
   return (
-    <AuthContextProvider>
+    
     <BrowserRouter>
     <Navbar/>
     <Routes>
@@ -54,6 +54,6 @@ export default function App() {
     </Routes>
     <Footer/>
     </BrowserRouter>
-    </AuthContextProvider>
+   
   )
 }
