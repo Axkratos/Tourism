@@ -26,10 +26,10 @@ function Login() {
       console.log('Response Data:', data);
 
       if (response.ok) {
-        localStorage.setItem('accessToken', data.token);
-        localStorage.setItem('userId', data._id);
-        localStorage.setItem('role', data.role);
-        navigate('/');
+        localStorage.setItem('accessToken', data.token);  // Save access token to local storage
+        localStorage.setItem('userId', data._id);         // Save user ID to local storage
+        localStorage.setItem('role', 'guide');          // Save user role to local storage
+        navigate('/dash');
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
       }
