@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../../context/authContext';
 
 function App() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const { setAuthUser } = useAuthContext();
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
@@ -28,6 +30,9 @@ function App() {
 
       const data = await response.json();
       console.log(data);
+
+      setAuthUser(data);
+      localStorage.setItem("kusmos", JSON.stringify(data));
       navigate('/dash');
     } catch (error) {
       setError('An error occurred. Please try again.');

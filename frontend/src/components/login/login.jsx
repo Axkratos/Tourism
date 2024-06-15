@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../../context/authContext';
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const { setAuthUser } = useAuthContext();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -22,6 +24,8 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
+        setAuthUser(data);
+        localStorage.setItem("kusmos", JSON.stringify(data));
         // Login successful
         navigate('/');
       } else {
@@ -118,7 +122,7 @@ function Login() {
             Don't have an account?{' '}
             <a
               className="text-red-600 hover:underline hover:underline-offset-4"
-              href="#"
+              href="/signup"
             >
               Register
             </a>
