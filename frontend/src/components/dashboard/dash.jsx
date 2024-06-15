@@ -6,7 +6,7 @@ const Widget = () => {
   const initialProfile = {
     name: 'Anupama',
     location: 'Kathmandu, Nepal',
-    hourlyRate: '$9/h',
+  
     profileImage: 'https://placehold.co/100x100',
     backgroundImage: 'https://placehold.co/600x300',
     quote: '"A girl who loves to travel and make new friends."',
