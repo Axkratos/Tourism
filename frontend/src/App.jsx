@@ -21,7 +21,11 @@ import Sidebar from './components/dashboard/sidebar'
 import KYCForm from './components/form/kyc'
 import Dash from './components/dashboard/dash'
 
+import Blog from './components/blog/component/Blog'
+import Singleblog from './components/blog/component/Singleblog'
+
 import { AuthContextProvider } from './context/authContext'
+
 export default function App() {
   return (
     <AuthContextProvider>
@@ -32,7 +36,8 @@ export default function App() {
     <Route path="/guides" element={<GuideSection />} />
 
         <Route path='/' element={<Home/>}></Route>
-
+<Route path='/blog' element={<Blog/>}></Route>
+<Route path='/singleblog' element={<Singleblog/>}/>
 
         <Route path='/signin' element={<SlidingLogin/>}></Route>
         <Route path='/form' element={<Form/>}></Route>
@@ -40,7 +45,7 @@ export default function App() {
         <Route path='/signup' element={<Signup/>}></Route>
         <Route path='/register' element={<GuideSignup/>}></Route>
         <Route path='/footer' element={<Footer/>}></Route>
-        <Route path='/dash' element={<Dash/>}></Route>
+        <Route path='/dash/:id' element={<Dash/>}></Route>
         <Route path='/review' element={<ReviewCard/>}></Route>
         <Route path='/kyc' element={<KYCForm/>}></Route>
         <Route path='/profile' element={<Profiles/>}></Route>

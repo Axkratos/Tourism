@@ -1,17 +1,53 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Widget = () => {
+<<<<<<< HEAD
   // State for editable profile fields
   const [profile, setProfile] = useState({});
+=======
+  const defaultProfileImage = 'https://placehold.co/100x100';
+  const defaultBackgroundImage = 'https://placehold.co/600x300';
+
+  // State for profile fields
+  const [profile, setProfile] = useState({
+    name: '',
+    location: '',
+    profileImage: '',
+    backgroundImage: '',
+    aboutMeContent: '',
+    exploreContent: '',
+    languages: '',
+    phoneNumber: '',
+  });
+
+  // State for reviews
+>>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
   const [reviews, setReviews] = useState([]);
   const [editMode, setEditMode] = useState(false);
+
+  // Fetch profile data from API on component mount
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/user/:id');
+        setProfile((prevProfile) => ({
+          ...prevProfile,
+          name: response.data.name,
+          location: response.data.location,
+        }));
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   // Simulate fetching reviews from an API
   useEffect(() => {
     const fetchReviews = async () => {
-      // Simulating a delay to mimic API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      // Dummy reviews data
       const dummyReviews = [
         { id: 1, text: 'Great service!', author: 'Jane Doe' },
         { id: 2, text: 'Very satisfied.', author: 'Bob Smith' },
@@ -23,6 +59,7 @@ const Widget = () => {
     fetchReviews();
   }, []);
 
+<<<<<<< HEAD
   // Update profile handler
   const updateProfile = (e) => {
     e.preventDefault();
@@ -37,6 +74,39 @@ const Widget = () => {
     setProfile(updatedProfile);
     setEditMode(false); // Exit edit mode after saving
     alert('Profile updated successfully!');
+=======
+  // Handle form submission for initial profile submission
+  const handleSubmitInitial = async (e) => {
+    e.preventDefault();
+    try {
+      // Replace with actual API endpoint for submitting initial profile data
+      await axios.post('http://localhost:3000/api/user/submit', profile);
+      alert('Initial profile information submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting initial profile information:', error);
+    }
+  };
+
+  // Handle form submission for updating profile
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      // Replace with actual API endpoint for updating profile data
+      await axios.put('http://localhost:3000/api/user/update', profile);
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  // Handle input change
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      [name]: value,
+    }));
+>>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
   };
 
   return (
@@ -48,10 +118,17 @@ const Widget = () => {
           <div className="md:col-span-2">
             {/* Profile header */}
             <div className="relative">
-              <img src={profile.backgroundImage} alt="Profile background" className="w-full h-48 object-cover" />
-              <div className="absolute top-4 right-4 text-white text-lg font-bold">{profile.hourlyRate}</div>
+              <img
+                src={profile.backgroundImage || defaultBackgroundImage}
+                alt="Profile background"
+                className="w-full h-48 object-cover"
+              />
               <div className="absolute top-4 left-4 flex items-center">
-                <img src={profile.profileImage} alt="Profile picture" className="w-24 h-24 rounded-full border-4 border-white" />
+                <img
+                  src={profile.profileImage || defaultProfileImage}
+                  alt="Profile picture"
+                  className="w-24 h-24 rounded-full border-4 border-white"
+                />
                 <div className="ml-4 text-white">
                   <h2 className="text-xl font-bold">{profile.name}</h2>
                   <p>{profile.location}</p>
@@ -60,8 +137,9 @@ const Widget = () => {
             </div>
 
             {/* Profile description */}
-            <form onSubmit={updateProfile}>
+            <form>
               <div className="p-4">
+<<<<<<< HEAD
                 <blockquote className="italic text-zinc-600 dark:text-zinc-300">
                   <textarea
                     name="quote"
@@ -89,24 +167,58 @@ const Widget = () => {
                     value={profile.exploreContent || ''}
                     onChange={(e) => setProfile({ ...profile, exploreContent: e.target.value })}
                     readOnly={!editMode}
+=======
+                <div className="mb-4">
+                  <label className="block text-zinc-600 dark:text-zinc-300">Location</label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={profile.location}
+                    onChange={handleInputChange}
+>>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
                 <div className="mb-4">
-                  <h4 className="font-semibold">{profile.aboutMeTitle}</h4>
+                  <label className="block text-zinc-600 dark:text-zinc-300">Phone Number</label>
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    value={profile.phoneNumber}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-zinc-600 dark:text-zinc-300">About Me</label>
                   <textarea
                     name="aboutMeContent"
+<<<<<<< HEAD
                     value={profile.aboutMeContent || ''}
                     onChange={(e) => setProfile({ ...profile, aboutMeContent: e.target.value })}
                     readOnly={!editMode}
+=======
+                    value={profile.aboutMeContent}
+                    onChange={handleInputChange}
+>>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
                 <div className="mb-4">
-                  <h4 className="font-semibold">Languages</h4>
+                  <label className="block text-zinc-600 dark:text-zinc-300">Places that I can visit you</label>
+                  <textarea
+                    name="exploreContent"
+                    value={profile.exploreContent}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-zinc-600 dark:text-zinc-300">Languages</label>
                   <input
                     type="text"
                     name="languages"
+<<<<<<< HEAD
                     value={profile.languages || ''}
                     onChange={(e) => setProfile({ ...profile, languages: e.target.value })}
                     readOnly={!editMode}
@@ -121,11 +233,16 @@ const Widget = () => {
                     value={profile.activities || ''}
                     onChange={(e) => setProfile({ ...profile, activities: e.target.value })}
                     readOnly={!editMode}
+=======
+                    value={profile.languages}
+                    onChange={handleInputChange}
+>>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
               </div>
 
+<<<<<<< HEAD
               {/* Edit/Save button */}
               <div className="p-4">
                 {editMode ? (
@@ -141,6 +258,24 @@ const Widget = () => {
                     Edit
                   </button>
                 )}
+=======
+              {/* Submit buttons */}
+              <div className="p-4 flex justify-between">
+                <button
+                  type="submit"
+                  onClick={handleSubmitInitial}
+                  className="py-2 px-4 bg-blue-400 hover:bg-blue-700 text-white rounded-lg"
+                >
+                  Submit Initial Info
+                </button>
+                <button
+                  type="submit"
+                  onClick={handleSubmitUpdate}
+                  className="py-2 px-4 bg-red-400 hover:bg-red-700 text-white rounded-lg"
+                >
+                  Update Profile
+                </button>
+>>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
               </div>
             </form>
           </div>
