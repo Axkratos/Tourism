@@ -19,6 +19,8 @@ import GuideSection from './admin/GuideSection'
 
 import KYCForm from './components/form/kyc'
 import Dash from './components/dashboard/dash'
+import Blog from './components/blog/component/Blog'
+import Singleblog from './components/blog/component/Singleblog'
 export default function App() {
   return (
     <BrowserRouter>
@@ -28,7 +30,8 @@ export default function App() {
     <Route path="/guides" element={<GuideSection />} />
 
         <Route path='/' element={<Home/>}></Route>
-
+<Route path='/blog' element={<Blog/>}></Route>
+<Route path='/singleblog' element={<Singleblog/>}/>
 
         <Route path='/signin' element={<SlidingLogin/>}></Route>
         <Route path='/login' element={<GuideLogin/>}></Route>
