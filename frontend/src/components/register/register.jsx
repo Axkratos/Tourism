@@ -152,7 +152,7 @@ function RegisterGuide() {
             Already have an account?{' '}
             <button
               className="text-pink-600 hover:underline"
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/signin')}
             >
               Login
             </button>
