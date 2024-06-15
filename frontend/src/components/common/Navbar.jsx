@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 export const Navbar = () => {
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem('accessToken');
+  const id =localStorage.getItem('userId');
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
@@ -32,6 +33,7 @@ export const Navbar = () => {
             About Us
           </a>
           {isLoggedIn ? (
+            <>
             <button
               type="button"
               className="text-white bg-red-400 hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-700"
@@ -39,6 +41,16 @@ export const Navbar = () => {
             >
               Logout
             </button>
+            <Link to={`/dash/${id}`}>
+            <button
+              type="button"
+              className="text-white bg-red-400 hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-700"
+            >
+              Profile
+            </button>
+            </Link>
+            </>
+            
           ) : (
             <>
               <button
