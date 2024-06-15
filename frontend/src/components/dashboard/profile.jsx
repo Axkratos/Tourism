@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Widget = () => {
   // Dummy data
@@ -46,15 +47,6 @@ const Widget = () => {
     // Update reviews state
     setReviews([...reviews, newReview]);
   };
-
-  const createTripHandler = () => {
-    alert('Create a trip clicked!');
-  };
-
-  const contactHandler = () => {
-    alert('Contact clicked!');
-  };
-
   return (
     <div className=" h-5xl w-screen mx-auto p-4">
       <div className="bg-zinc-100 dark:bg-zinc-800 rounded-lg shadow-lg overflow-hidden">
@@ -154,19 +146,15 @@ const Widget = () => {
                 Create a Trip
               </div>
             </div>
+            <Link to={'/form'}>
             <button
               className=" bg-red-400  hover:bg-red-600 text-white w-full py-2 rounded-lg mb-4"
-              onClick={createTripHandler}
+             
             >
               CREATE A TRIP
             </button>
-            <div className="text-center text-zinc-600 dark:text-zinc-300 mb-4">or</div>
-            <button
-              className="bg-zinc-200 hover:bg-zinc-500 dark:bg-zinc-600 text-zinc-800 dark:text-zinc-200 w-full py-2 rounded-lg"
-              onClick={contactHandler}
-            >
-              CONTACT
-            </button>
+            </Link>
+           
             <div className="flex justify-center mt-4">
               
             </div>
