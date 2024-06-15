@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthContext } from '../../context/authContext';
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const { setAuthUser } = useAuthContext();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch('http://localhost:3000/api/tourist/login', {
         method: 'POST',
@@ -20,16 +18,16 @@ function Login() {
         },
         body: JSON.stringify({ email, password }),
       });
-
+  
       const data = await response.json();
-
+      console.log('Response Data:', data); // Log the response data
+  
       if (response.ok) {
-        setAuthUser(data);
-        localStorage.setItem("kusmos", JSON.stringify(data));
-        // Login successful
+        localStorage.setItem('accessToken', data.token);  // Save access token to local storage
+        localStorage.setItem('userId', data._id);         // Save user ID to local storage
+        localStorage.setItem('role', data.role);          // Save user role to local storage
         navigate('/');
       } else {
-        // Login failed, set error message
         setError(data.message);
       }
     } catch (error) {
@@ -37,6 +35,7 @@ function Login() {
       setError('Error logging in. Please try again later.');
     }
   };
+  
 
   return (
     <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
@@ -54,7 +53,6 @@ function Login() {
               type="button"
               className="mx-1 h-9 w-9 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-[0_4px_9px_-4px_#3b71ca]"
             >
-              {/* Insert your SVG or icon here */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="mx-auto h-3.5 w-3.5"
@@ -68,7 +66,6 @@ function Login() {
               type="button"
               className="inlne-block mx-1 h-9 w-9 rounded-full bg-blue-600 hover:bg-blue-700 uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca]"
             >
-              {/* Insert your SVG or icon here */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="mx-auto h-3.5 w-3.5"
@@ -98,36 +95,13 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <div className="mt-4 flex justify-between font-semibold text-sm">
-            <label className="flex text-slate-500 hover:text-slate-600 cursor-pointer">
-              <input className="mr-1" type="checkbox" />
-              <span>Remember Me</span>
-            </label>
-            <a
-              className="text-blue-600 hover:text-blue-700 hover:underline hover:underline-offset-4"
-              href="#"
-            >
-              Forgot Password?
-            </a>
-          </div>
-          <div className="text-center md:text-left">
-            <button
-              className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 text-white uppercase rounded text-xs tracking-wider"
-              type="submit"
-            >
-              Login
-            </button>
-          </div>
-          <div className="mt-4 font-semibold text-sm text-slate-500 text-center md:text-left">
-            Don't have an account?{' '}
-            <a
-              className="text-red-600 hover:underline hover:underline-offset-4"
-              href="/signup"
-            >
-              Register
-            </a>
-          </div>
-          {error && <p className="text-red-500 mt-2">{error}</p>}
+          {error && <div className="text-red-500 mt-2">{error}</div>}
+          <button
+            className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Sign In
+          </button>
         </form>
       </div>
     </section>
