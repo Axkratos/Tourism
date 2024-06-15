@@ -1,13 +1,14 @@
 // Import required modules
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import database from './db/database.js'; // Import your database initialization function
-import userRoutes from './routes/userRoutes.js'; // Import your user routes
-import tripRoutes from './routes/tripRoutes.js'; // Import other routes as needed
-import kycRoutes from './routes/kycRoutes.js'; // Import other routes as needed
-import touristRoutes from './routes/touristRoutes.js'; // Import other routes as needed
-import dashRoutes from './routes/dashRoutes.js'
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import database from "./db/database.js"; // Import your database initialization function
+import userRoutes from "./routes/userRoutes.js"; // Import your user routes
+import tripRoutes from "./routes/tripRoutes.js"; // Import other routes as needed
+import kycRoutes from "./routes/kycRoutes.js"; // Import other routes as needed
+import touristRoutes from "./routes/touristRoutes.js"; // Import other routes as needed
+import dashRoutes from "./routes/dashRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -24,25 +25,23 @@ app.use(express.urlencoded({ extended: true }));
 
 // CORS configuration
 // CORS configuration
-const corsOptions = {
-  origin: 'http://localhost:5173', // Update with your frontend URL
-  credentials: true, // Allow credentials (cookies, authorization headers)
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specified methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allow specified headers
+var corsOptions = {
+  origin: "http://localhost:5173",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 app.use(cors(corsOptions));
 
 // Handling preflight requests
-app.options('*', cors(corsOptions));
-
+app.options("*", cors(corsOptions));
 
 // Routes
-app.use('/api/user', userRoutes);
-app.use('/api/trip', tripRoutes);
-app.use('/api/kyc', kycRoutes);
-app.use('/api/tourist', touristRoutes);
-app.use('/api/dash',dashRoutes)
+app.use("/api/user", userRoutes);
+app.use("/api/trip", tripRoutes);
+app.use("/api/kyc", kycRoutes);
+app.use("/api/tourist", touristRoutes);
+app.use("/api/dash", dashRoutes);
+app.use("/api/profile", profileRoutes);
 
 // Define the port to listen on
 const PORT = process.env.PORT || 3000;
