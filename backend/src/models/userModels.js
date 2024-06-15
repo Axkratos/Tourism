@@ -21,11 +21,21 @@ const userSchema = new Schema({
         type: String,
         enum: ['user', 'guide'],
         default: 'guide'
+
     },
     addedinfo: {
         type: Schema.Types.ObjectId,
         ref: "Profile"
     }
+
+     },
+     reviews: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Review',
+        },
+    ],
+
 }, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);

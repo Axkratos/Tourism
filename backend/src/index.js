@@ -1,14 +1,18 @@
 // Import required modules
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import database from "./db/database.js"; // Import your database initialization function
-import userRoutes from "./routes/userRoutes.js"; // Import your user routes
-import tripRoutes from "./routes/tripRoutes.js"; // Import other routes as needed
-import kycRoutes from "./routes/kycRoutes.js"; // Import other routes as needed
+
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import database from './db/database.js';
+import userRoutes from './routes/userRoutes.js';
+import tripRoutes from './routes/tripRoutes.js';
+import kycRoutes from './routes/kycRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js'
+import cookieParser from 'cookie-parser';
 import touristRoutes from "./routes/touristRoutes.js"; // Import other routes as needed
 import dashRoutes from "./routes/dashRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
+
 
 // Load environment variables from .env file
 dotenv.config();
@@ -23,7 +27,7 @@ database(); // Make sure this function initializes your database connection
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS configuration
+
 // CORS configuration
 var corsOptions = {
   origin: "http://localhost:5173",
@@ -35,7 +39,9 @@ app.use(cors(corsOptions));
 // Handling preflight requests
 app.options("*", cors(corsOptions));
 
+
 // Routes
+app.use("/api/review",reviewRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/trip", tripRoutes);
 app.use("/api/kyc", kycRoutes);
