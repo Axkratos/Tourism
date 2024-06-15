@@ -7,6 +7,7 @@ import userRoutes from './routes/userRoutes.js'; // Import your user routes
 import tripRoutes from './routes/tripRoutes.js'; // Import other routes as needed
 import kycRoutes from './routes/kycRoutes.js'; // Import other routes as needed
 import touristRoutes from './routes/touristRoutes.js'; // Import other routes as needed
+import dashRoutes from './routes/dashRoutes.js'
 
 // Load environment variables from .env file
 dotenv.config();
@@ -41,6 +42,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/trip', tripRoutes);
 app.use('/api/kyc', kycRoutes);
 app.use('/api/tourist', touristRoutes);
+app.use('/api/dash',dashRoutes)
 
 // Define the port to listen on
 const PORT = process.env.PORT || 3000;
