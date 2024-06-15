@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//This is for tourist
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -10,6 +10,8 @@ function Register() {
     role: 'tourist'
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -18,21 +20,31 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the formData to your backend using fetch or axios
-    console.log(formData);
-    // Example fetch request
-    // fetch('/api/register', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(formData)
-    // })
-    // .then(response => response.json())
-    // .then(data => console.log(data))
-    // .catch(error => console.error('Error:', error));
+
+    try {
+      const response = await fetch('http://localhost:3000/api/tourist/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Registration successful
+        navigate('/login');
+      } else {
+        // Registration failed, set error message
+        setError(data.message);
+      }
+    } catch (error) {
+      console.error('Error registering:', error);
+      setError('Error registering. Please try again later.');
+    }
   };
 
   return (
@@ -129,12 +141,12 @@ function Register() {
         {/* End Registration Form */}
         <div className="mt-4 font-semibold text-sm text-slate-500 text-center md:text-left">
           Already have an account?{' '}
-          <a
+          <button
             className="text-red-600 hover:underline hover:underline-offset-4"
-            href="#"
+            onClick={() => navigate('/login')}
           >
             Login
-          </a>
+          </button>
         </div>
       </div>
     </section>
