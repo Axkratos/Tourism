@@ -133,7 +133,7 @@ export default function Form() {
                     className="w-full p-2 border rounded-lg dark:bg-zinc-700 dark:border-zinc-600 dark:text-white"
                 />
             </div>
-            <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold">CREATE NEW TRIP</button>
+            <button type="submit" className=" bg-red-400  hover:bg-red-600 text-white w-full py-2 rounded-lg mb-4">CREATE NEW TRIP</button>
         </form>
     );
 }
