@@ -1,4 +1,5 @@
 // Import required modules
+
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -8,6 +9,11 @@ import tripRoutes from './routes/tripRoutes.js';
 import kycRoutes from './routes/kycRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js'
 import cookieParser from 'cookie-parser';
+import touristRoutes from "./routes/touristRoutes.js"; // Import other routes as needed
+import dashRoutes from "./routes/dashRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
+
+
 // Load environment variables from .env file
 dotenv.config();
 
@@ -15,23 +21,33 @@ dotenv.config();
 const app = express();
 
 // Connect to database
-database();
+database(); // Make sure this function initializes your database connection
 
 // Middleware to parse incoming requests
-app.use(express.json({ limit: "16kb" }));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 // CORS configuration
-app.use(cors({
-  origin: process.env.CORS_ORIGIN,
-  credentials: true
-}));
-app.use(cookieParser());
+var corsOptions = {
+  origin: "http://localhost:5173",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+
+// Handling preflight requests
+app.options("*", cors(corsOptions));
+
+
 // Routes
 app.use("/api/review",reviewRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/trip", tripRoutes);
 app.use("/api/kyc", kycRoutes);
+app.use("/api/tourist", touristRoutes);
+app.use("/api/dash", dashRoutes);
+app.use("/api/profile", profileRoutes);
 
 // Define the port to listen on
 const PORT = process.env.PORT || 3000;
