@@ -6,7 +6,8 @@ import database from './db/database.js';
 import userRoutes from './routes/userRoutes.js';
 import tripRoutes from './routes/tripRoutes.js';
 import kycRoutes from './routes/kycRoutes.js';
-
+import reviewRoutes from './routes/reviewRoutes.js'
+import cookieParser from 'cookie-parser';
 // Load environment variables from .env file
 dotenv.config();
 
@@ -25,8 +26,9 @@ app.use(cors({
   origin: process.env.CORS_ORIGIN,
   credentials: true
 }));
-
+app.use(cookieParser());
 // Routes
+app.use("/api/review",reviewRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/trip", tripRoutes);
 app.use("/api/kyc", kycRoutes);
