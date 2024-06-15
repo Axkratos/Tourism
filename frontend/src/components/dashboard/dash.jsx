@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Widget = () => {
-<<<<<<< HEAD
-  // State for editable profile fields
-  const [profile, setProfile] = useState({});
-=======
   const defaultProfileImage = 'https://placehold.co/100x100';
   const defaultBackgroundImage = 'https://placehold.co/600x300';
 
@@ -22,7 +18,6 @@ const Widget = () => {
   });
 
   // State for reviews
->>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
   const [reviews, setReviews] = useState([]);
   const [editMode, setEditMode] = useState(false);
 
@@ -59,22 +54,6 @@ const Widget = () => {
     fetchReviews();
   }, []);
 
-<<<<<<< HEAD
-  // Update profile handler
-  const updateProfile = (e) => {
-    e.preventDefault();
-    // Here you would normally update profile data from form inputs
-    // For simplicity, let's assume all inputs have 'name' attributes corresponding to profile fields
-    const updatedProfile = {};
-    Array.from(e.target.elements).forEach((element) => {
-      if (element.name) {
-        updatedProfile[element.name] = element.value;
-      }
-    });
-    setProfile(updatedProfile);
-    setEditMode(false); // Exit edit mode after saving
-    alert('Profile updated successfully!');
-=======
   // Handle form submission for initial profile submission
   const handleSubmitInitial = async (e) => {
     e.preventDefault();
@@ -106,7 +85,6 @@ const Widget = () => {
       ...prevProfile,
       [name]: value,
     }));
->>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
   };
 
   return (
@@ -139,35 +117,6 @@ const Widget = () => {
             {/* Profile description */}
             <form>
               <div className="p-4">
-<<<<<<< HEAD
-                <blockquote className="italic text-zinc-600 dark:text-zinc-300">
-                  <textarea
-                    name="quote"
-                    value={profile.quote || ''}
-                    onChange={(e) => setProfile({ ...profile, quote: e.target.value })}
-                    readOnly={!editMode}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  />
-                </blockquote>
-                <p className="text-zinc-600 dark:text-zinc-300 mt-2">
-                  Reply rate: <span className="font-bold">{profile.replyRate}</span>
-                </p>
-                <p className="text-zinc-600 dark:text-zinc-300">
-                  Replies within: <span className="font-bold">{profile.repliesWithin}</span>
-                </p>
-              </div>
-
-              {/* Explore and About me sections */}
-              <div className="p-4">
-                <h3 className="text-xl font-semibold mb-2">{profile.exploreTitle}</h3>
-                <div className="mb-4">
-                  <h4 className="font-semibold">I will show you</h4>
-                  <textarea
-                    name="exploreContent"
-                    value={profile.exploreContent || ''}
-                    onChange={(e) => setProfile({ ...profile, exploreContent: e.target.value })}
-                    readOnly={!editMode}
-=======
                 <div className="mb-4">
                   <label className="block text-zinc-600 dark:text-zinc-300">Location</label>
                   <input
@@ -175,7 +124,6 @@ const Widget = () => {
                     name="location"
                     value={profile.location}
                     onChange={handleInputChange}
->>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -193,14 +141,8 @@ const Widget = () => {
                   <label className="block text-zinc-600 dark:text-zinc-300">About Me</label>
                   <textarea
                     name="aboutMeContent"
-<<<<<<< HEAD
-                    value={profile.aboutMeContent || ''}
-                    onChange={(e) => setProfile({ ...profile, aboutMeContent: e.target.value })}
-                    readOnly={!editMode}
-=======
                     value={profile.aboutMeContent}
                     onChange={handleInputChange}
->>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -218,47 +160,13 @@ const Widget = () => {
                   <input
                     type="text"
                     name="languages"
-<<<<<<< HEAD
-                    value={profile.languages || ''}
-                    onChange={(e) => setProfile({ ...profile, languages: e.target.value })}
-                    readOnly={!editMode}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
-                <div className="mb-4">
-                  <h4 className="font-semibold">Activities</h4>
-                  <input
-                    type="text"
-                    name="activities"
-                    value={profile.activities || ''}
-                    onChange={(e) => setProfile({ ...profile, activities: e.target.value })}
-                    readOnly={!editMode}
-=======
                     value={profile.languages}
                     onChange={handleInputChange}
->>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
               </div>
 
-<<<<<<< HEAD
-              {/* Edit/Save button */}
-              <div className="p-4">
-                {editMode ? (
-                  <button type="submit" className="py-2 px-4 bg-green-400 hover:bg-green-700 text-white rounded-lg mr-4">
-                    Save
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setEditMode(true)}
-                    className="py-2 px-4 bg-blue-400 hover:bg-blue-700 text-white rounded-lg mr-4"
-                  >
-                    Edit
-                  </button>
-                )}
-=======
               {/* Submit buttons */}
               <div className="p-4 flex justify-between">
                 <button
@@ -275,7 +183,6 @@ const Widget = () => {
                 >
                   Update Profile
                 </button>
->>>>>>> 300f747c714f533ebc4bfe86a0d039d272180520
               </div>
             </form>
           </div>
