@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
+import Profile from '../models/profileModel.js';
 
-const userSchema = mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema({
     fullName: {
         type: String,
         required: true
@@ -14,11 +17,17 @@ const userSchema = mongoose.Schema({
         type: String,
         required: [true, "Please enter your password"]
     },
-     
-     roles:{
+    roles: {
         type: String,
         enum: ['user', 'guide'],
         default: 'guide'
+
+    },
+    addedinfo: {
+        type: Schema.Types.ObjectId,
+        ref: "Profile"
+    }
+
      },
      reviews: [
         {
@@ -26,7 +35,10 @@ const userSchema = mongoose.Schema({
           ref: 'Review',
         },
     ],
+
 }, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);
+
+
 export default User;
