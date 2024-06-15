@@ -39,11 +39,12 @@ const createDash = async (req, res) => {
 };
 
 // Update a dash entry by ID
- const updateDashById = async (req, res) => {
+// Update a dash entry by ID
+const updateDashById = async (req, res) => {
   try {
     const { id } = req.params;
-    const { address, aboutMe, visitLocation, language } = req.body;
-    const updatedDash = await Dash.findByIdAndUpdate(id, { address, aboutMe, visitLocation, language ,phoneNumber}, { new: true });
+    const { address, aboutMe, visitLocation, language, phoneNumber } = req.body; // Include phoneNumber here
+    const updatedDash = await Dash.findByIdAndUpdate(id, { address, aboutMe, visitLocation, language, phoneNumber }, { new: true });
     if (!updatedDash) {
       res.status(404).json({ message: 'Dash entry not found' });
       return;
@@ -53,6 +54,7 @@ const createDash = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 export { createDash , getAllDash,getDashById,updateDashById}

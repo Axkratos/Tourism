@@ -5,7 +5,6 @@ const Widget = () => {
   const defaultProfileImage = 'https://placehold.co/100x100';
   const defaultBackgroundImage = 'https://placehold.co/600x300';
 
-  // State for profile fields
   const [profile, setProfile] = useState({
     name: '',
     location: '',
@@ -18,19 +17,16 @@ const Widget = () => {
   });
 
   // State for reviews
+
   const [reviews, setReviews] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const userId = '666d0d53dc7dd20aa2e63c3c'; // Replace with actual user ID
 
-  // Fetch profile data from API on component mount
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/user/:id');
-        setProfile((prevProfile) => ({
-          ...prevProfile,
-          name: response.data.name,
-          location: response.data.location,
-        }));
+        const response = await axios.get(`http://localhost:3000/api/dash/dashid/${userId}`);
+        setProfile(response.data);
       } catch (error) {
         console.error('Error fetching profile:', error);
       }
@@ -39,7 +35,6 @@ const Widget = () => {
     fetchProfile();
   }, []);
 
-  // Simulate fetching reviews from an API
   useEffect(() => {
     const fetchReviews = async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -54,31 +49,26 @@ const Widget = () => {
     fetchReviews();
   }, []);
 
-  // Handle form submission for initial profile submission
   const handleSubmitInitial = async (e) => {
     e.preventDefault();
     try {
-      // Replace with actual API endpoint for submitting initial profile data
-      await axios.post('http://localhost:3000/api/user/submit', profile);
+      await axios.post('http://localhost:3000/api/user/create', profile);
       alert('Initial profile information submitted successfully!');
     } catch (error) {
       console.error('Error submitting initial profile information:', error);
     }
   };
 
-  // Handle form submission for updating profile
   const handleSubmitUpdate = async (e) => {
     e.preventDefault();
     try {
-      // Replace with actual API endpoint for updating profile data
-      await axios.put('http://localhost:3000/api/user/update', profile);
+      await axios.put(`http://localhost:3000/api/user/update/${userId}`, profile);
       alert('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
     }
   };
 
-  // Handle input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProfile((prevProfile) => ({
@@ -90,11 +80,8 @@ const Widget = () => {
   return (
     <div className="max-w-5xl mx-auto p-4">
       <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg shadow-lg overflow-hidden">
-        {/* Main content */}
         <div className="grid md:grid-cols-3 gap-4">
-          {/* Left column */}
           <div className="md:col-span-2">
-            {/* Profile header */}
             <div className="relative">
               <img
                 src={profile.backgroundImage || defaultBackgroundImage}
@@ -117,6 +104,35 @@ const Widget = () => {
             {/* Profile description */}
             <form>
               <div className="p-4">
+
+                <blockquote className="italic text-zinc-600 dark:text-zinc-300">
+                  <textarea
+                    name="quote"
+                    value={profile.quote || ''}
+                    onChange={(e) => setProfile({ ...profile, quote: e.target.value })}
+                    readOnly={!editMode}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  />
+                </blockquote>
+                <p className="text-zinc-600 dark:text-zinc-300 mt-2">
+                  Reply rate: <span className="font-bold">{profile.replyRate}</span>
+                </p>
+                <p className="text-zinc-600 dark:text-zinc-300">
+                  Replies within: <span className="font-bold">{profile.repliesWithin}</span>
+                </p>
+              </div>
+
+              {/* Explore and About me sections */}
+              <div className="p-4">
+                <h3 className="text-xl font-semibold mb-2">{profile.exploreTitle}</h3>
+                <div className="mb-4">
+                  <h4 className="font-semibold">I will show you</h4>
+                  <textarea
+                    name="exploreContent"
+                    value={profile.exploreContent || ''}
+                    onChange={(e) => setProfile({ ...profile, exploreContent: e.target.value })}
+                    readOnly={!editMode}
+
                 <div className="mb-4">
                   <label className="block text-zinc-600 dark:text-zinc-300">Location</label>
                   <input
@@ -167,33 +183,47 @@ const Widget = () => {
                 </div>
               </div>
 
+              {/* Edit/Save button */}
+              <div className="p-4">
+                {editMode ? (
+                  <button type="submit" className="py-2 px-4 bg-green-400 hover:bg-green-700 text-white rounded-lg mr-4">
+                    Save
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setEditMode(true)}
+                    className="py-2 px-4 bg-blue-400 hover:bg-blue-700 text-white rounded-lg mr-4"
+                  >
+                    Edit
+                  </button>
+                )}
+
               {/* Submit buttons */}
               <div className="p-4 flex justify-between">
                 <button
                   type="submit"
-                  onClick={handleSubmitInitial}
                   className="py-2 px-4 bg-blue-400 hover:bg-blue-700 text-white rounded-lg"
                 >
-                  Submit Initial Info
+                  {editMode ? 'Update Profile' : 'Submit Initial Info'}
                 </button>
-                <button
-                  type="submit"
-                  onClick={handleSubmitUpdate}
-                  className="py-2 px-4 bg-red-400 hover:bg-red-700 text-white rounded-lg"
-                >
-                  Update Profile
-                </button>
+                {!editMode && (
+                  <button
+                    type="button"
+                    onClick={() => setEditMode(true)}
+                    className="py-2 px-4 bg-green-400 hover:bg-green-700 text-white rounded-lg"
+                  >
+                    Edit Profile
+                  </button>
+                )}
               </div>
             </form>
           </div>
 
-          {/* Right column */}
           <div className="bg-deepPurple-50 md:col-span-1 bg-white dark:bg-zinc-700 p-4 border border-zinc-200 dark:border-zinc-600">
             <div className="flex items-center mb-4">
               <div className="text-lg text-gray-700 dark:text-gray-300">Reviews</div>
             </div>
-
-            {/* List of reviews */}
             <div className="p-4">
               {reviews.length > 0 ? (
                 <ul>
@@ -216,4 +246,3 @@ const Widget = () => {
 };
 
 export default Widget;
-
