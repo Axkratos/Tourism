@@ -45,10 +45,8 @@ function RegisterGuide() {
         throw new Error('Network response was not ok');
       }
   
-      const data = await response.json();
       setSuccess('Registration successful');
-      navigate('/login')
-      console.log(data);
+      navigate('/login'); // Redirect to login page on success
     } catch (error) {
       setError('Error: ' + error.message);
       console.error('Error:', error);
