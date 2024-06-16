@@ -6,7 +6,7 @@ import Hero from '../../homecomponents/Hero'
 const Blog = () => {
   return (
     <div>
-        <Hero/>
+        
 <AllBblog/>
 
     </div>
