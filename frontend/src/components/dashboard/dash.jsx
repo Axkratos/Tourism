@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 const Widget = () => {
   const defaultProfileImage = 'https://placehold.co/100x100';
@@ -16,24 +15,8 @@ const Widget = () => {
     phoneNumber: '',
   });
 
-  // State for reviews
-
   const [reviews, setReviews] = useState([]);
   const [editMode, setEditMode] = useState(false);
-  const userId = '666d0d53dc7dd20aa2e63c3c'; // Replace with actual user ID
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/api/dash/dashid/${userId}`);
-        setProfile(response.data);
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-      }
-    };
-
-    fetchProfile();
-  }, []);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -52,22 +35,28 @@ const Widget = () => {
   const handleSubmitInitial = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/user/create', profile);
-      alert('Initial profile information submitted successfully!');
+      console.log('Sending profile:', profile);
+  
+      const response = await fetch('http://localhost:3000/api/user/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profile),
+      });
+  
+      console.log('Response:', response);
+  
+      if (response.ok) {
+        alert('Initial profile information submitted successfully!');
+      } else {
+        throw new Error('Failed to submit initial profile information');
+      }
     } catch (error) {
       console.error('Error submitting initial profile information:', error);
     }
   };
-
-  const handleSubmitUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.put(`http://localhost:3000/api/user/update/${userId}`, profile);
-      alert('Profile updated successfully!');
-    } catch (error) {
-      console.error('Error updating profile:', error);
-    }
-  };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -101,38 +90,8 @@ const Widget = () => {
               </div>
             </div>
 
-            {/* Profile description */}
-            <form>
+            <form onSubmit={editMode ? handleSubmitUpdate : handleSubmitInitial}>
               <div className="p-4">
-
-                <blockquote className="italic text-zinc-600 dark:text-zinc-300">
-                  <textarea
-                    name="quote"
-                    value={profile.quote || ''}
-                    onChange={(e) => setProfile({ ...profile, quote: e.target.value })}
-                    readOnly={!editMode}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  />
-                </blockquote>
-                <p className="text-zinc-600 dark:text-zinc-300 mt-2">
-                  Reply rate: <span className="font-bold">{profile.replyRate}</span>
-                </p>
-                <p className="text-zinc-600 dark:text-zinc-300">
-                  Replies within: <span className="font-bold">{profile.repliesWithin}</span>
-                </p>
-              </div>
-
-              {/* Explore and About me sections */}
-              <div className="p-4">
-                <h3 className="text-xl font-semibold mb-2">{profile.exploreTitle}</h3>
-                <div className="mb-4">
-                  <h4 className="font-semibold">I will show you</h4>
-                  <textarea
-                    name="exploreContent"
-                    value={profile.exploreContent || ''}
-                    onChange={(e) => setProfile({ ...profile, exploreContent: e.target.value })}
-                    readOnly={!editMode}
-
                 <div className="mb-4">
                   <label className="block text-zinc-600 dark:text-zinc-300">Location</label>
                   <input
@@ -182,24 +141,6 @@ const Widget = () => {
                   />
                 </div>
               </div>
-
-              {/* Edit/Save button */}
-              <div className="p-4">
-                {editMode ? (
-                  <button type="submit" className="py-2 px-4 bg-green-400 hover:bg-green-700 text-white rounded-lg mr-4">
-                    Save
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setEditMode(true)}
-                    className="py-2 px-4 bg-blue-400 hover:bg-blue-700 text-white rounded-lg mr-4"
-                  >
-                    Edit
-                  </button>
-                )}
-
-              {/* Submit buttons */}
               <div className="p-4 flex justify-between">
                 <button
                   type="submit"

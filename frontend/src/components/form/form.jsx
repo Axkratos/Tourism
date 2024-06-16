@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate } from 'react-router-dom';
 
-export default function Form() {
+export default function Form({socketInstance}) {
     const navigate = useNavigate();
     const [location, setLocation] = useState('Kathmandu 44600, Nepal');
     const [dateFrom, setDateFrom] = useState(new Date());
@@ -13,6 +13,7 @@ export default function Form() {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
+    const userId = localStorage.getItem('userId');
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         switch (name) {
@@ -38,6 +39,7 @@ export default function Form() {
             dateTo,
             numPeople,
             priceBid,
+            userId
         };
         
         try {
@@ -48,7 +50,7 @@ export default function Form() {
                 },
                 body: JSON.stringify(tripDetails),
             });
-
+           
             if (!response.ok) {
                 const errorData = await response.json();
                 setError(errorData.message);
@@ -56,6 +58,7 @@ export default function Form() {
             }
 
             const data = await response.json();
+            socketInstance.emit('request', { tripDetails });
             console.log('Trip created successfully:', data);
             setSuccess(true);
             navigate('/');  // Redirect to home or another page if needed

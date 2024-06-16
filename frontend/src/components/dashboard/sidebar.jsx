@@ -2,16 +2,28 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaUser, FaFileAlt, FaSignOutAlt } from 'react-icons/fa';
 import { BiUser } from 'react-icons/bi';
+import { useEffect } from 'react';
 import './Sidebar.css';
+import socketClient  from "socket.io-client";
 
 
-const Sidebar = () => {
+const Sidebar = ({socketInstance}) => {
  
- 
+ const guideId = localStorage.getItem('userId');
 
   const handleLogout = async () => {
     await logout();
   };
+
+  useEffect(() => {
+    socketInstance.emit('guideConnected', { guideId });
+    socketInstance.on('alert', (data) => {
+      console.log('Request received:', data);
+    });
+  }, []);
+
+    
+  
 
   return (
     <div className="sidebar">
@@ -19,7 +31,7 @@ const Sidebar = () => {
         <div className='user-image'>
           <BiUser style={{ fontSize: "40px" }} />
         </div>
-        <p>Name:jyoti </p>
+        <p>Jyoti Raut </p>
       </div>
       <div className="menu">
         <Link to="/home" className="menu-item">
@@ -30,7 +42,7 @@ const Sidebar = () => {
           <FaUser />
           <span>Profile</span>
         </Link>
-        <Link to="/request" className="menu-item">
+        <Link to="/trips" className="menu-item">
           <FaFileAlt />
           <span>Request</span>
         </Link>
