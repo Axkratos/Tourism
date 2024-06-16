@@ -47,10 +47,10 @@ export default function App() {
         <Route path='/signup' element={<Signup/>}></Route>
         <Route path='/register' element={<GuideSignup/>}></Route>
         <Route path='/footer' element={<Footer/>}></Route>
-        <Route path='/dash/:userId' element={<Widget/>}></Route>
+        <Route path='/dash/:email' element={<Dash/>}></Route>
         <Route path='/review' element={<ReviewCard/>}></Route>
         <Route path='/kyc' element={<KYCForm/>}></Route>
-        <Route path='/profile' element={<Profiles/>}></Route>
+        <Route path='/profile/:email' element={<Profiles/>}></Route>
         <Route path='/dashboard' element={<Dashboard/>}></Route>
         <Route path="/verify/:id" element={<GuideVerification />} />
         <Route path="/sidebar" element={<Sidebar/>}/>

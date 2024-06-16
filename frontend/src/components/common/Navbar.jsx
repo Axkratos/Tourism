@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 export const Navbar = () => {
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem('accessToken');
-  const id =localStorage.getItem('userId');
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
@@ -15,7 +16,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900">
+    <nav className=" border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <button
           className="flex items-center space-x-3 rtl:space-x-reverse"
@@ -34,23 +35,15 @@ export const Navbar = () => {
           </a>
           {isLoggedIn ? (
             <>
-            <button
-              type="button"
-              className="text-white bg-red-400 hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-700"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-            <Link to={`/dash/${id}`}>
-            <button
-              type="button"
-              className="text-white bg-red-400 hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-700"
-            >
-              Profile
-            </button>
-            </Link>
+              <button
+                type="button"
+                className="text-white bg-red-400 hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-700"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+              <FontAwesomeIcon icon={faUserCircle} className="text-gray-900 dark:text-white text-3xl cursor-pointer" onClick={() => navigate('/sidebar')} />
             </>
-            
           ) : (
             <>
               <button

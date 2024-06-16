@@ -23,17 +23,15 @@ database(); // Make sure this function initializes your database connection
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS configuration
-// CORS configuration
-var corsOptions = {
-  origin: "http://localhost:5173",
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+// CORS configuration (allow all origins, methods, and headers)
+app.use(cors({
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: "Content-Type, Authorization",
+}));
 
-app.use(cors(corsOptions));
-
-// Handling preflight requests
-app.options("*", cors(corsOptions));
+// Handling preflight requests (OPTIONS method)
+app.options("*", cors());
 
 // Routes
 app.use("/api/user", userRoutes);
@@ -49,6 +47,12 @@ const PORT = process.env.PORT || 3000;
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+// Basic error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
 // Export the app if needed for testing or other modules

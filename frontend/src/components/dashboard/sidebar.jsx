@@ -31,8 +31,15 @@ const Sidebar = () => {
     fetchUserName();
   }, []); // Empty dependency array ensures this effect runs only once on component mount
 
-  const handleLogout = async () => {
-    // Handle logout logic here
+  const handleLogout = () => {
+    // Clear local storage items
+    localStorage.removeItem('userId');
+    localStorage.removeItem('email');
+    localStorage.removeItem('role');
+    localStorage.removeItem('token');
+
+    // Navigate to login or home page after logout
+    window.location.href = '/login'; // Replace with your desired redirect path after logout
   };
 
   return (
@@ -44,11 +51,12 @@ const Sidebar = () => {
         <p>Name: {userName}</p>
       </div>
       <div className="menu">
-        <Link to="/home" className="menu-item">
+        <Link to="/blog#" className="menu-item">
           <FaHome />
           <span>Home</span>
         </Link>
-        <Link to="/dash" className="menu-item">
+        {/* Change the path for Profile to include :email parameter */}
+        <Link to={`/dash/${localStorage.getItem('email')}`} className="menu-item">
           <FaUser />
           <span>Profile</span>
         </Link>
