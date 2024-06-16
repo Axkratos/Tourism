@@ -1,5 +1,6 @@
 import Profile from "../models/profileModel.js";
 
+
 // GET profile data by email
 const getProfileDataW = async (req, res) => {
     try {
@@ -35,6 +36,23 @@ const getProfileData = async (req, res) => {
 };
 
 // UPDATE or CREATE profile data
+
+// Get profile data
+const getProfileData = async (req, res) => {
+  try {
+    const profile = await Profile.findOne();
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile data not found' });
+    }
+    res.status(200).json(profile);
+  } catch (error) {
+    console.error('Error fetching profile data:', error);
+    res.status(500).json({ message: 'Error fetching profile data', error });
+  }
+};
+
+// Update profile data
+
 const updateProfileData = async (req, res) => {
   try {
     const email = req.params.email; // Assuming email is passed as a URL parameter
@@ -44,20 +62,25 @@ const updateProfileData = async (req, res) => {
     let profile = await Profile.findOne({ email });
 
     if (profile) {
+
       // If profile exists, update it
       profile = await Profile.findOneAndUpdate({ email }, newData, {
         new: true,
       });
+
     } else {
       // If profile doesn't exist, create a new one
       profile = new Profile({ email, ...newData });
       await profile.save();
+      res.status(201).json({ message: 'Profile data created successfully!', data: profile });
     }
+
 
     res.json({ message: "Profile data updated successfully!", data: profile });
   } catch (error) {
     console.error("Error updating profile data:", error);
     res.status(500).json({ message: "Error updating profile data", error });
+
   }
 };
 
