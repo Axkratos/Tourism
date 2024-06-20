@@ -61,7 +61,9 @@ export default function Form({socketInstance}) {
             socketInstance.emit('request', { tripDetails });
             console.log('Trip created successfully:', data);
             setSuccess(true);
-            navigate('/');  // Redirect to home or another page if needed
+            alert("Your Booking was submitted,you will be response soon!")
+            navigate('/'); 
+             // Redirect to home or another page if needed
         } catch (error) {
             setError('An error occurred. Please try again.');
             console.error('Error:', error);

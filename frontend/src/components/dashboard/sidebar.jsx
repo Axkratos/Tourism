@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaUser, FaFileAlt, FaSignOutAlt } from 'react-icons/fa';
 import { BiUser } from 'react-icons/bi';
-import { useEffect } from 'react';
+
 import './Sidebar.css';
 import socketClient  from "socket.io-client";
 
@@ -11,8 +11,39 @@ const Sidebar = ({socketInstance}) => {
  
  const guideId = localStorage.getItem('userId');
 
-  const handleLogout = async () => {
-    await logout();
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          throw new Error('User ID not found in localStorage');
+        }
+
+        const response = await fetch(`http://localhost:3000/api/user/users/${userId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const userData = await response.json();
+        setUserName(userData.fullName); // Assuming the API response has a 'fullName' field
+      } catch (error) {
+        console.error('Error fetching user data:', error.message);
+        // Handle error fetching user data
+      }
+    };
+
+    fetchUserName();
+  }, []); // Empty dependency array ensures this effect runs only once on component mount
+
+  const handleLogout = () => {
+    // Clear local storage items
+    localStorage.removeItem('userId');
+    localStorage.removeItem('email');
+    localStorage.removeItem('role');
+    localStorage.removeItem('token');
+
+    // Navigate to login or home page after logout
+    window.location.href = '/login'; // Replace with your desired redirect path after logout
   };
 
   useEffect(() => {
@@ -34,11 +65,12 @@ const Sidebar = ({socketInstance}) => {
         <p>Jyoti Raut </p>
       </div>
       <div className="menu">
-        <Link to="/home" className="menu-item">
+        <Link to="/blog#" className="menu-item">
           <FaHome />
           <span>Home</span>
         </Link>
-        <Link to="/dash" className="menu-item">
+        {/* Change the path for Profile to include :email parameter */}
+        <Link to={`/dash/${localStorage.getItem('email')}`} className="menu-item">
           <FaUser />
           <span>Profile</span>
         </Link>

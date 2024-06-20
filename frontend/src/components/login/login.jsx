@@ -25,7 +25,8 @@ function Login() {
       if (response.ok) {
         localStorage.setItem('accessToken', data.token);  // Save access token to local storage
         localStorage.setItem('userId', data._id);         // Save user ID to local storage
-        localStorage.setItem('role', 'tourist');          // Save user role to local storage
+        localStorage.setItem('role', 'tourist');   
+        localStorage.setItem('email', data.email);  
         navigate('/');
       } else {
         setError(data.message);

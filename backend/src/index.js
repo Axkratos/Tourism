@@ -1,4 +1,5 @@
 // Import required modules
+
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -8,7 +9,6 @@ import tripRoutes from './routes/tripRoutes.js'; // Import other routes as neede
 import kycRoutes from './routes/kycRoutes.js'; // Import other routes as needed
 import touristRoutes from './routes/touristRoutes.js'; // Import other routes as needed
 import dashRoutes from './routes/dashRoutes.js'
-import profileRoutes from './routes/profileRoutes.js'; // Import other routes as needed
 
 // Load environment variables from .env file
 dotenv.config();
@@ -37,19 +37,28 @@ database(); // Make sure this function initializes your database connection
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+// CORS configuration (allow all origins, methods, and headers)
+app.use(cors({
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: "Content-Type, Authorization",
+}));
+
+
 // CORS configuration
 // CORS configuration
 const corsOptions = {
   origin: 'http://localhost:5173', // Update with your frontend URL
-  // credentials: true, // Allow credentials (cookies, authorization headers)
-  // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specified methods
-  // allowedHeaders: ['Content-Type', 'Authorization'], // Allow specified headers
+  credentials: true, // Allow credentials (cookies, authorization headers)
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specified methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow specified headers
 };
 
 app.use(cors(corsOptions));
 
-// Handling preflight requests
-app.options('*', cors(corsOptions));
+// Handling preflight requests (OPTIONS method)
+app.options("*", cors());
 
 
 // Routes
@@ -58,15 +67,14 @@ app.use('/api/trip', tripRoutes);
 app.use('/api/kyc', kycRoutes);
 app.use('/api/tourist', touristRoutes);
 app.use('/api/dash',dashRoutes)
-app.use('/api/profile', profileRoutes);
 
 // Define the port to listen on
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
-// // Start the server
-// app.listen(PORT, () => {
-//   console.log(`Server is running on http://localhost:${PORT}`);
-// });
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 // // Export the app if needed for testing or other modules
 // export { app };

@@ -3,22 +3,23 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Topuser = () => {
-  const [users, setUsers] = useState([]);
-
-  const fetchTopRatedUser = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/api/user/alluser');
-      console.log(response);
-      if (response.status === 200) {
-        setUsers(response.data.data);
-      }
-    } catch (error) {
-      console.error('Error fetching top rated users:', error);
-    }
-  };
+  const [profiles, setProfiles] = useState([]);
 
   useEffect(() => {
-    fetchTopRatedUser();
+    const fetchProfiles = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/profile/profile');
+        console.log(response);
+        if (response.status === 200) {
+          setProfiles(response.data); // Assuming response.data is an array of profiles
+        }
+      } catch (error) {
+        console.error('Error fetching profiles:', error);
+      }
+    };
+
+
+    fetchProfiles();
   }, []);
 
   return (
@@ -31,27 +32,29 @@ const Topuser = () => {
           <p className="text-lg text-gray-500 mt-2">Choose your best</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 p-4">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="bg-white shadow-md rounded-lg p-4">
+
+          {profiles.map((profile, index) => (
+            <div key={index} className="bg-white shadow-md rounded-lg p-4">
               <div className="rounded-t-lg h-24 overflow-hidden">
                 <img
                   className="object-cover object-top w-full h-full"
-                  src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ"
-                  alt="Mountain"
+                  src={profile.backgroundImage}
+                  alt="Background"
                 />
               </div>
               <div className="mx-auto w-20 h-20 relative -mt-12 border-4 border-white rounded-full overflow-hidden">
                 <img
                   className="object-cover object-center w-full h-full"
-                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ"
+                  src={profile.profileImage}
                   alt="Profile"
                 />
               </div>
               <div className="text-center mt-2">
-                <h2 className="font-semibold text-xl">Sarah Smith</h2>
-                <p className="text-gray-500 text-sm">Freelance Web Designer</p>
+                <h2 className="font-semibold text-xl">{profile.name}</h2>
+                <p className="text-gray-500 text-sm">{profile.quote}</p>
               </div>
               <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around text-sm">
+                {/* Example: Display other user statistics */}
                 <li className="flex flex-col items-center justify-around">
                   <svg
                     className="w-4 fill-current text-blue-900"
@@ -83,13 +86,14 @@ const Topuser = () => {
                   <div>15</div>
                 </li>
               </ul>
-              <Link to={'/profile'} className="p-2 border-t mx-4 mt-2">
+              <Link to={`/profile/${profile.email}`} className="p-2 border-t mx-4 mt-2">
                 <button className="w-full block mx-auto rounded-full bg-gray-900 hover:shadow-lg font-semibold text-white px-4 py-2 text-sm">
                   View
                 </button>
               </Link>
             </div>
           ))}
+
         </div>
       </div>
     </>

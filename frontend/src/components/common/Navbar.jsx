@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle, faBell } from '@fortawesome/free-solid-svg-icons';
-import socketClient  from "socket.io-client";
+import socketClient from "socket.io-client";
 import socketInstance from './socket';
 
-export const Navbar = ({socketInstance}) => {
+export const Navbar = ({ socketInstance }) => {
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem('accessToken');
   const userRole = localStorage.getItem('role'); // Fetch user role from localStorage
@@ -57,7 +57,7 @@ export const Navbar = ({socketInstance}) => {
   };
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900">
+    <nav className=" border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <button
           className="flex items-center space-x-3 rtl:space-x-reverse"
@@ -109,13 +109,15 @@ export const Navbar = ({socketInstance}) => {
             />
           )}
           {isLoggedIn ? (
-            <button
-              type="button"
-              className="text-white bg-red-400 hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-700"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            <>
+              <button
+                type="button"
+                className="text-white bg-red-400 hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-700"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </>
           ) : (
             <>
               <button

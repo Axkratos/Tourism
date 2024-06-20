@@ -1,62 +1,45 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const Widget = () => {
   const defaultProfileImage = 'https://placehold.co/100x100';
   const defaultBackgroundImage = 'https://placehold.co/600x300';
 
   const [profile, setProfile] = useState({
+    email: '',
     name: '',
     location: '',
     profileImage: '',
     backgroundImage: '',
-    aboutMeContent: '',
-    exploreContent: '',
+    quote: '',
     languages: '',
-    phoneNumber: '',
+    activities: '',
   });
 
-  const [reviews, setReviews] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const { userId } = useParams(); // Assuming userId is passed as a URL parameter
+
+  // Dummy reviews data
+  const reviews = [
+    { id: 1, text: 'Great experience!', author: 'John Doe' },
+    { id: 2, text: 'Awesome service!', author: 'Jane Smith' },
+    { id: 3, text: 'Very professional.', author: 'Alice Johnson' },
+  ];
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const dummyReviews = [
-        { id: 1, text: 'Great service!', author: 'Jane Doe' },
-        { id: 2, text: 'Very satisfied.', author: 'Bob Smith' },
-        { id: 3, text: 'Amazing experience!', author: 'John Doe' },
-      ];
-      setReviews(dummyReviews);
+    const fetchProfile = async () => {
+      try {
+        const email = localStorage.getItem('email'); // Get email from localStorage
+        const response = await axios.get(`http://localhost:3000/api/profile/profile/${email}`);
+        setProfile(response.data);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
     };
 
-    fetchReviews();
-  }, []);
-
-  const handleSubmitInitial = async (e) => {
-    e.preventDefault();
-    try {
-      console.log('Sending profile:', profile);
-  
-      const response = await fetch('http://localhost:3000/api/user/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(profile),
-      });
-  
-      console.log('Response:', response);
-  
-      if (response.ok) {
-        alert('Initial profile information submitted successfully!');
-      } else {
-        throw new Error('Failed to submit initial profile information');
-      }
-    } catch (error) {
-      console.error('Error submitting initial profile information:', error);
-    }
-  };
-  
+    fetchProfile();
+  }, []); // Empty dependency array ensures this effect runs only once on component mount
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,6 +47,23 @@ const Widget = () => {
       ...prevProfile,
       [name]: value,
     }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (editMode) {
+        await axios.put(`http://localhost:3000/api/profile/profile/${profile.email}`, profile);
+        alert('Profile updated successfully!');
+      } else {
+        await axios.post('http://localhost:3000/api/profile/profile', profile);
+        alert('Initial profile information submitted successfully!');
+      }
+      setEditMode(false); // Reset edit mode after submission
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile');
+    }
   };
 
   return (
@@ -85,70 +85,61 @@ const Widget = () => {
                 />
                 <div className="ml-4 text-white">
                   <h2 className="text-xl font-bold">{profile.name}</h2>
-                  <p>{profile.location}</p>
+                  {profile.location && <p>{profile.location}</p>}
                 </div>
               </div>
             </div>
 
-            <form onSubmit={editMode ? handleSubmitUpdate : handleSubmitInitial}>
+            <form onSubmit={handleSubmit}>
               <div className="p-4">
-                <div className="mb-4">
-                  <label className="block text-zinc-600 dark:text-zinc-300">Location</label>
-                  <input
-                    type="text"
-                    name="location"
-                    value={profile.location}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-zinc-600 dark:text-zinc-300">Phone Number</label>
-                  <input
-                    type="text"
-                    name="phoneNumber"
-                    value={profile.phoneNumber}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-zinc-600 dark:text-zinc-300">About Me</label>
-                  <textarea
-                    name="aboutMeContent"
-                    value={profile.aboutMeContent}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-zinc-600 dark:text-zinc-300">Places that I can visit you</label>
-                  <textarea
-                    name="exploreContent"
-                    value={profile.exploreContent}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-zinc-600 dark:text-zinc-300">Languages</label>
-                  <input
-                    type="text"
-                    name="languages"
-                    value={profile.languages}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
+                {profile.quote && (
+                  <div className="mb-4">
+                    <label className="block text-zinc-600 dark:text-zinc-300">Quote</label>
+                    <textarea
+                      name="quote"
+                      value={profile.quote}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      readOnly={!editMode} // Disable input in view mode
+                    />
+                  </div>
+                )}
+                {profile.languages && (
+                  <div className="mb-4">
+                    <label className="block text-zinc-600 dark:text-zinc-300">Languages</label>
+                    <input
+                      type="text"
+                      name="languages"
+                      value={profile.languages}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      readOnly={!editMode} // Disable input in view mode
+                    />
+                  </div>
+                )}
+                {profile.activities && (
+                  <div className="mb-4">
+                    <label className="block text-zinc-600 dark:text-zinc-300">Activities</label>
+                    <input
+                      type="text"
+                      name="activities"
+                      value={profile.activities}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      readOnly={!editMode} // Disable input in view mode
+                    />
+                  </div>
+                )}
               </div>
               <div className="p-4 flex justify-between">
-                <button
-                  type="submit"
-                  className="py-2 px-4 bg-blue-400 hover:bg-blue-700 text-white rounded-lg"
-                >
-                  {editMode ? 'Update Profile' : 'Submit Initial Info'}
-                </button>
-                {!editMode && (
+                {editMode ? (
+                  <button
+                    type="submit"
+                    className="py-2 px-4 bg-blue-400 hover:bg-blue-700 text-white rounded-lg"
+                  >
+                    Update Profile
+                  </button>
+                ) : (
                   <button
                     type="button"
                     onClick={() => setEditMode(true)}

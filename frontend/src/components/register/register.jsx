@@ -47,6 +47,7 @@ function RegisterGuide() {
   
       const data = await response.json();
       setSuccess('Registration successful');
+      navigate('/signin')
       console.log(data);
     } catch (error) {
       setError('Error: ' + error.message);

@@ -17,7 +17,7 @@ import GuideSection from './admin/GuideSection'
 import Form from './components/form/form'
 import Sidebar from './components/dashboard/sidebar'
 import TripsList from './components/dashboard/request'
-import ProfileForm from './components/dashboard/profile'
+
 
 import KYCForm from './components/form/kyc'
 import Dash from './components/dashboard/dash'
@@ -48,15 +48,15 @@ export default function App() {
         <Route path='/signup' element={<Signup/>}></Route>
         <Route path='/register' element={<GuideSignup/>}></Route>
         <Route path='/footer' element={<Footer/>}></Route>
-        <Route path='/dash/' element={<Dash/>}></Route>
+        <Route path='/dash/:email' element={<Dash/>}></Route>
         <Route path='/review' element={<ReviewCard/>}></Route>
         <Route path='/kyc' element={<KYCForm/>}></Route>
-        <Route path='/profile' element={<Profiles/>}></Route>
+        <Route path='/profile/:email' element={<Profiles/>}></Route>
         <Route path='/dashboard' element={<Dashboard/>}></Route>
         <Route path="/verify/:id" element={<GuideVerification />} />
         <Route path="/sidebar" element={<Sidebar socketInstance={socket}/>}/>
         <Route path="/trips" element={<TripsList socketInstance={socket}/>}/>
-        <Route path="/profileform" element={<ProfileForm/>}/>
+        
     </Routes>
     <Footer/>
     </BrowserRouter>

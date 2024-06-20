@@ -8,16 +8,15 @@ const generateRandomProfileImage = () => {
 
 // Function to generate random user name
 const generateRandomUserName = () => {
-  const names = ['Anup Adhikari','Mamta paudel'];
+  const names = ['Anup Adhikari', 'Mamta Paudel'];
   const randomIndex = Math.floor(Math.random() * names.length);
   return names[randomIndex];
 };
 
-const TripsList = ({socketInstance}) => {
+const TripsList = ({ socketInstance }) => {
   const [trips, setTrips] = useState([]);
 
   useEffect(() => {
-  
     const fetchTrips = async () => {
       try {
         const response = await fetch('http://localhost:3000/api/trip/get');
@@ -25,11 +24,13 @@ const TripsList = ({socketInstance}) => {
           throw new Error('Failed to fetch trips');
         }
         const tripsData = await response.json();
-        setTrips(tripsData.map(trip => ({
-          ...trip,
-          userProfileImage: generateRandomProfileImage(),
-          userName: generateRandomUserName()
-        })));
+        setTrips(
+          tripsData.map((trip) => ({
+            ...trip,
+            userProfileImage: generateRandomProfileImage(),
+            userName: generateRandomUserName(),
+          }))
+        );
       } catch (error) {
         console.error('Error fetching trips:', error);
       }
@@ -39,16 +40,15 @@ const TripsList = ({socketInstance}) => {
   }, []);
 
   const handleAccept = (tripId) => {
-    // Handle accept logic here
+    setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripId));
     console.log(`Accepted trip with ID: ${tripId}`);
-    socketInstance.emit('accept', { "msg":'Your trip has been accepted' });
-
+    socketInstance.emit('accept', { msg: 'Your trip has been accepted' });
   };
 
   const handleDecline = (tripId) => {
-    // Handle decline logic here
+    setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripId));
     console.log(`Declined trip with ID: ${tripId}`);
-    socketInstance.emit('decline', { "msg":'Your trip has been declined' });
+    socketInstance.emit('decline', { msg: 'Your trip has been declined' });
   };
 
   return (
@@ -82,8 +82,12 @@ const TripsList = ({socketInstance}) => {
                 </td>
                 <td className="py-3 px-4">{trip.userName}</td>
                 <td className="py-3 px-4">{trip.location}</td>
-                <td className="py-3 px-4">{new Date(trip.dateFrom).toLocaleString()}</td>
-                <td className="py-3 px-4">{new Date(trip.dateTo).toLocaleString()}</td>
+                <td className="py-3 px-4">
+                  {new Date(trip.dateFrom).toLocaleString()}
+                </td>
+                <td className="py-3 px-4">
+                  {new Date(trip.dateTo).toLocaleString()}
+                </td>
                 <td className="py-3 px-4">{trip.numPeople}</td>
                 <td className="py-3 px-4">{trip.priceBid}</td>
                 <td className="py-3 px-4">
