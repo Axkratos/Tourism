@@ -26,6 +26,7 @@ database(); // Make sure this function initializes your database connection
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 // CORS configuration (allow all origins, methods, and headers)
 app.use(cors({
   origin: "*",
@@ -33,10 +34,20 @@ app.use(cors({
   allowedHeaders: "Content-Type, Authorization",
 }));
 
+
+// CORS configuration
+var corsOptions = {
+  origin: "http://localhost:5173",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+
 // Handling preflight requests (OPTIONS method)
 app.options("*", cors());
 
+
 // Routes
+app.use("/api/review",reviewRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/trip", tripRoutes);
 app.use("/api/kyc", kycRoutes);
