@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom'; // Import useParams to get route parameters
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const Widget = () => {
-  const [profile, setProfile] = useState(null); // State to store profile data
-  const [reviews, setReviews] = useState([]); // State to store reviews
+  const [profile, setProfile] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const { email } = useParams(); // Get email from route parameters
 
   // Function to fetch profile data from the API based on email parameter
   const fetchProfileData = async () => {
     try {
       const response = await axios.get(`http://localhost:3000/api/profile/profile/${email}`);
-      setProfile(response.data); // Update profile state with API response data
+      setProfile(response.data);
     } catch (error) {
       console.error('Error fetching profile data:', error);
     }
@@ -30,9 +30,12 @@ const Widget = () => {
     setReviews([...reviews, newReview]);
   };
 
-  // useEffect to fetch profile data when component mounts
+  // useEffect to fetch profile data and save email to local storage when component mounts
   useEffect(() => {
     fetchProfileData();
+    if (email) {
+      localStorage.setItem('visitedUserEmail', email);
+    }
   }, [email]); // Dependency on email ensures it re-fetches when email parameter changes
 
   // Render loading message while profile data is being fetched

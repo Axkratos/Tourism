@@ -7,7 +7,7 @@ function RegisterGuide() {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'guide' // Changed role to 'guide'
+    role: 'guide'
   });
 
   const navigate = useNavigate();
@@ -31,22 +31,8 @@ function RegisterGuide() {
     }
   
     try {
-      const response = await fetch('http://localhost:3000/api/guide/signup', { // Updated API endpoint for guides
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
-        credentials: 'include', // Include credentials in the request
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      const data = await response.json();
-      console.log(data);
-      navigate('/signin'); // Redirect to login page on success
+      // Simulating successful registration without server interaction
+      navigate('/signin'); // Redirect to login page
     } catch (error) {
       setError('Error: ' + error.message);
       console.error('Error:', error);
@@ -142,14 +128,14 @@ function RegisterGuide() {
             value="guide"
           />
           <button
-            className="mt-4 bg-red-600 hover:bg-red-700 px-4 py-2 text-white uppercase rounded-lg text-xs tracking-wider shadow-md" // Changed button color to #DC2626
+            className="mt-4 bg-red-600 hover:bg-red-700 px-4 py-2 text-white uppercase rounded-lg text-xs tracking-wider shadow-md"
             type="submit"
           >
             Register
           </button>
         </form>
         {/* End Registration Form */}
-        {error && <p className="mt-4 text-red-600">{error}</p>} {/* Changed error message color to red */}
+        {error && <p className="mt-4 text-red-600">{error}</p>}
         <div className="mt-4 font-semibold text-sm text-gray-500 text-center md:text-left">
           Already have an account?{' '}
           <button

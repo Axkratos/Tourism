@@ -1,6 +1,7 @@
 // Import required modules
 import express from "express";
 import dotenv from "dotenv";
+import http from "http";
 import cors from "cors";
 import database from "./db/database.js"; // Import your database initialization function
 import userRoutes from "./routes/userRoutes.js"; // Import your user routes
@@ -9,12 +10,14 @@ import kycRoutes from "./routes/kycRoutes.js"; // Import other routes as needed
 import touristRoutes from "./routes/touristRoutes.js"; // Import other routes as needed
 import dashRoutes from "./routes/dashRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
+import startSocket from "./socketLogic.js"; // Import socket logic module
 
 // Load environment variables from .env file
 dotenv.config();
 
-// Initialize Express app
+// Initialize Express app and HTTP server
 const app = express();
+const server = http.createServer(app);
 
 // Connect to database
 database(); // Make sure this function initializes your database connection
@@ -41,13 +44,8 @@ app.use("/api/tourist", touristRoutes);
 app.use("/api/dash", dashRoutes);
 app.use("/api/profile", profileRoutes);
 
-// Define the port to listen on
-const PORT = process.env.PORT || 3000;
-
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Start Socket.IO logic
+const io = startSocket(server);
 
 // Basic error handling middleware
 app.use((err, req, res, next) => {
@@ -55,5 +53,10 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-// Export the app if needed for testing or other modules
-export { app };
+// Define the port to listen on
+const PORT = process.env.PORT || 3000;
+
+// Start the combined server
+server.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
