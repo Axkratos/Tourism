@@ -11,7 +11,8 @@ const generateToken = (userId) => {
 
 const signupUser = async (req, res) => {
   try {
-    const { fullName, email, password, confirmPassword } = req.body;
+    const { fullName, email, password, confirmPassword, role } = req.body;
+    console.log(fullName, email, password, confirmPassword, role);  
 
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match" });
@@ -19,6 +20,10 @@ const signupUser = async (req, res) => {
 
     if (!fullName || !email || !password || !confirmPassword) {
       return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if (!["user", "guide"].includes(role)) {
+      return res.status(400).json({ message: "Invalid role specified" });
     }
 
     const existingUser = await User.findOne({ email });
@@ -33,8 +38,10 @@ const signupUser = async (req, res) => {
       fullName,
       email,
       password: hashedPassword,
+      roles: role,
     });
 
+    // Save the new user
     await newUser.save();
 
     // Generate JWT token
@@ -50,6 +57,7 @@ const signupUser = async (req, res) => {
       _id: newUser._id,
       fullName: newUser.fullName,
       email: newUser.email,
+      roles: newUser.roles,
       token: token, // Send token in response for frontend storage (optional)
     });
   } catch (error) {
@@ -88,6 +96,7 @@ const loginUser = async (req, res) => {
       _id: user._id,
       fullName: user.fullName,
       email: user.email,
+      roles: user.roles,
       token: token, // Send token in response for frontend storage (optional)
     });
   } catch (error) {
@@ -119,7 +128,7 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).populate("addedinfo reviews");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

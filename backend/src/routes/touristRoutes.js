@@ -5,22 +5,14 @@ import { signupTourist, loginTourist, logoutTourist } from '../controllers/touri
 const router = express.Router();
 
 // CORS configuration
-const corsOptions = {
-  origin: '*', // Allow all origins
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: 'Content-Type, Authorization',
-};
-
-// Apply CORS middleware to each route
-router.use(cors(corsOptions));
 
 // POST /api/tourists/signup
-router.post('/signup', cors(corsOptions), signupTourist);
+router.post('/signup', signupTourist);
 
 // POST /api/tourists/login
-router.post('/login', cors(corsOptions), loginTourist);
+router.post('/login', loginTourist);
 
 // POST /api/tourists/logout
-router.post('/logout', cors(corsOptions), logoutTourist);
+router.post('/logout', logoutTourist);
 
 export default router;

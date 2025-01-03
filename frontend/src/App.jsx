@@ -17,6 +17,7 @@ import GuideSection from './admin/GuideSection'
 import Form from './components/form/form'
 import Sidebar from './components/dashboard/sidebar'
 import Profileform from './components/form/profileForm'
+import Notification from './components/notification/notification.jsx'
 
 
 import KYCForm from './components/form/kyc'
@@ -25,6 +26,7 @@ import Dash from './components/dashboard/dash'
 import Blog from './components/blog/component/Blog'
 import Singleblog from './components/blog/component/Singleblog'
 import Widget from './components/dashboard/dash'
+import Request from './components/request/request'
 
 
 
@@ -55,6 +57,8 @@ export default function App() {
         <Route path="/verify/:id" element={<GuideVerification />} />
         <Route path="/sidebar" element={<Sidebar/>}/>
         <Route path="/profileform" element={<Profileform/>}/>
+        <Route path='/request' element={<Request/>}/>
+        <Route path='/notification' element={<Notification/>}/>
     </Routes>
     <Footer/>
     </BrowserRouter>

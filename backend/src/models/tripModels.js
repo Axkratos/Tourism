@@ -5,6 +5,14 @@ const tripSchema = new mongoose.Schema({
         type: String, 
         required: true
      },
+     guide: { 
+        type: String, 
+        required: true
+     },
+     tourist: { 
+        type: String, 
+        required: true
+     },
     dateFrom: { 
         type: Date, 
         required: true 

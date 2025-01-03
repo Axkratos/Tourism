@@ -27,7 +27,20 @@ function Login() {
         localStorage.setItem('userId', data._id);         // Save user ID to local storage
         localStorage.setItem('role', 'guide'); 
         localStorage.setItem('email', data.email);          // Save user role to local storage
-        navigate('/sidebar');
+
+        // Fetch the user's data to check the form status
+        const userResponse = await fetch(`http://localhost:3000/api/user/users/${data._id}`, {
+          headers: {
+            'Authorization': `Bearer ${data.token}`, // Send the token in the header
+          },
+        });
+
+        const userData = await userResponse.json();
+        if (userData.form === 'unsubmitted') {
+          navigate('/profileform');  // Redirect to the profile form page
+        } else {
+          navigate(`/dash/${email}`);  // Redirect to the dashboard if form is already submitted
+        }
       } else {
         setError(data.message);
       }

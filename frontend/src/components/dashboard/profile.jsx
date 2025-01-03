@@ -127,7 +127,8 @@ const Widget = () => {
                 Create a Trip
               </div>
             </div>
-            <Link to={'/form'}>
+            {/* Pass email as a query parameter */}
+            <Link to={`/form?email=${email}`}>
               <button
                 className="bg-red-400 hover:bg-red-600 text-white w-full py-2 rounded-lg mb-4"
               >

@@ -1,4 +1,5 @@
 import Profile from "../models/profileModel.js";
+import User from "../models/userModels.js";
 
 
 // GET profile data by email
@@ -38,7 +39,7 @@ const getProfileData = async (req, res) => {
 // UPDATE or CREATE profile data
 
 // Get profile data
-const getProfileData = async (req, res) => {
+const getProfileDataC = async (req, res) => {
   try {
     const profile = await Profile.findOne();
     if (!profile) {
@@ -84,48 +85,67 @@ const updateProfileData = async (req, res) => {
   }
 };
 
-// CREATE new profile data
+
 const createProfileData = async (req, res) => {
-    console.log(req.body);
-    try {
-        const {
-            email,
-            name,
-            location,
-            profileImage,
-            backgroundImage,
-            quote,
-            aboutMeTitle,
-            aboutMeContent,
-            languages,
-            activities,
-        } = req.body;
+  try {
+    const { email, name, location, quote, aboutMeTitle, aboutMeContent, languages, activities } = req.body;
 
-        // Validate required fields
-        if (!name || !location || !profileImage || !backgroundImage || !quote || !aboutMeTitle || !aboutMeContent || !languages || !activities) {
-            return res.status(400).json({ message: "Missing required fields" });
-        }
-
-        const profile = new Profile({
-            email,
-            name,
-            location,
-            profileImage,
-            backgroundImage,
-            quote,
-            aboutMeTitle,
-            aboutMeContent,
-            languages, // Assuming languages and activities are correctly provided as arrays
-            activities,
-        });
-
-        await profile.save();
-
-        res.status(201).json({ message: "Profile created successfully!", data: profile });
-    } catch (error) {
-        console.error("Error creating profile:", error);
-        res.status(500).json({ message: "Error creating profile", error });
+    // Validate required fields
+    if (!name || !location || !quote || !aboutMeTitle || !aboutMeContent || !languages || !activities) {
+      return res.status(400).json({ message: 'All fields are required' });
     }
+
+    // Check if a profile already exists for the given email
+    let existingProfile = await Profile.findOne({ email });
+
+    if (existingProfile) {
+      // If a profile already exists, update it
+      existingProfile.name = name;
+      existingProfile.location = location;
+      existingProfile.quote = quote;
+      existingProfile.aboutMeTitle = aboutMeTitle;
+      existingProfile.aboutMeContent = aboutMeContent;
+      existingProfile.languages = languages.split(',').map(language => language.trim()); // Convert to array of strings
+      existingProfile.activities = activities.split(',').map(activity => activity.trim()); // Convert to array of strings
+
+      // Save the updated profile
+      await existingProfile.save();
+    } else {
+      // If no profile exists, create a new one
+      existingProfile = new Profile({
+        email,
+        name,
+        location,
+        quote,
+        aboutMeTitle,
+        aboutMeContent,
+        languages: languages.split(',').map(language => language.trim()), // Convert to array of strings
+        activities: activities.split(',').map(activity => activity.trim()), // Convert to array of strings
+      });
+
+      // Save the new profile
+      await existingProfile.save();
+    }
+
+    // Find the user by email and update the 'form' field to 'submitted'
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update the 'form' field in the user model to 'submitted'
+    user.form = 'submitted';
+    await user.save();
+
+    res.status(200).json({ message: 'Profile created/updated successfully and form marked as submitted', data: existingProfile });
+  } catch (error) {
+    console.error('Error creating/updating profile:', error);
+    res.status(500).json({ message: 'Error creating/updating profile', error });
+  }
 };
+
+// Export the controller methods
+
 
 export { getProfileData, updateProfileData, createProfileData,getProfileDataW };
