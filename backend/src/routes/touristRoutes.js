@@ -4,8 +4,7 @@ import { signupTourist, loginTourist, logoutTourist } from '../controllers/touri
 
 const router = express.Router();
 
-// CORS configuration
-
+router.use(cors());
 // POST /api/tourists/signup
 router.post('/signup', signupTourist);
 

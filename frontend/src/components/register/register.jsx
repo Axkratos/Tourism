@@ -1,113 +1,119 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-function RegisterTourist() {
+const TouristRegistration = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    role: "guide",
   });
 
-  const navigate = useNavigate();
+  const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
     try {
-      const response = await fetch("http://localhost:3000/api/tourist/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-        credentials: "include",
-      });
+      const payload = {
+        ...formData,
+        role: "tourist",
+      };
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.message || "Registration failed");
-        return;
-      }
-
-      const data = await response.json();
-      setSuccess("Registration successful");
+      const response = await axios.post("http://localhost:3000/api/tourist/signup", payload);
+      setMessage(response.data.message);
+      setError(null);
       navigate("/signin");
     } catch (err) {
-      setError(`Error: ${err.message}`);
+      setError(err.response?.data?.message || "An error occurred");
+      setMessage(null);
     }
   };
 
   return (
-    <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
-      <div className="md:w-1/3 max-w-sm">
-        <img
-          src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-          alt="Sample image"
-        />
-      </div>
-      <div className="md:w-1/3 max-w-sm">
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <input
-            className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
-            type="text"
-            name="fullName"
-            placeholder="Full Name"
-            value={formData.fullName}
-            onChange={handleChange}
-          />
-          <input
-            className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          <input
-            className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          <input
-            className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-          />
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+        <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">
+          Tourist Registration
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">Full Name</label>
+            <input
+              type="text"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Confirm your password"
+              required
+            />
+          </div>
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          {message && <p className="text-green-500 text-sm mb-4">{message}</p>}
           <button
-            className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 text-white uppercase rounded text-xs tracking-wider"
             type="submit"
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
           >
-            Register
+            Register as Touroist
           </button>
         </form>
-        {error && <p className="mt-4 text-red-600">{error}</p>}
-        {success && <p className="mt-4 text-green-600">{success}</p>}
+        <p className="text-sm text-gray-600 mt-4 text-center">
+          Already have an account? 
+          <button
+            onClick={() => navigate("/signin")}
+            className="text-blue-500 hover:underline"
+          >
+            Login
+          </button>
+        </p>
       </div>
-    </section>
+    </div>
   );
-}
+};
 
-export default RegisterTourist;
+export default TouristRegistration;
